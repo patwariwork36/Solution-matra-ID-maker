@@ -1264,12 +1264,23 @@ function render(){
   const mode = state.printMode || 'pair';
   let html = '';
 
-  // Hospital template = single card per person (no separate back)
+  // Hospital template = CR80 cards in a 3×3 grid per A4 page
+  // Group people into pages of 9, rows of 3
   if (tmpl === 'hospital'){
-    html = state.people.map(p =>
-      '<div class="print-row">' + fn(p) + '</div>'
-    ).join('');
-    const sizeNote = '<div class="hosp-size-note" style="font-size:10px;color:#888;text-align:center;margin-top:6px;letter-spacing:0.5px;">🖨️ Print size: <b>CR80 — 54 × 85.6 mm</b> (standard ID card)</div>';
+    const COLS = 3;
+    const PER_PAGE = 9; // 3 cols × 3 rows per A4
+    const allCards = state.people.map(p => fn(p));
+    let pages = [];
+    for (let i = 0; i < allCards.length; i += PER_PAGE) {
+      const pageCards = allCards.slice(i, i + PER_PAGE);
+      let rows = [];
+      for (let j = 0; j < pageCards.length; j += COLS) {
+        rows.push('<div class="hosp-row">' + pageCards.slice(j, j + COLS).join('') + '</div>');
+      }
+      pages.push('<div class="hosp-page">' + rows.join('') + '</div>');
+    }
+    html = pages.join('');
+    const sizeNote = '<div class="hosp-size-note" style="font-size:10px;color:#888;text-align:center;margin-top:6px;letter-spacing:0.5px;">🖨️ Print size: <b>CR80 — 54 × 85.6 mm</b> (standard ID card) &nbsp;|&nbsp; 9 cards per A4 page</div>';
     document.getElementById('preview').innerHTML = html + sizeNote;
     fitHospitalCards();   // scale content to always fit 340×540
     return;

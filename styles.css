@@ -267,6 +267,22 @@ input[type=range]{flex:1;}
 .bcard.landscape .bsm{font-weight:700;color:#222;line-height:1.4;}
 .bcard.landscape .bblood{display:inline-block;background:var(--c-accent);color:#fff;font-weight:900;padding:1px 12px;border-radius:4px;margin-top:1px;letter-spacing:0.5px;}
 
+/* ── Hospital print grid structure ──
+   hosp-page = 1 A4 page (9 cards: 3×3)
+   hosp-row  = 1 horizontal row of 3 cards */
+.hosp-page{
+  display:block;
+  margin-bottom:24px;
+}
+.hosp-row{
+  display:flex;
+  flex-direction:row;
+  flex-wrap:wrap;
+  gap:16px;
+  padding:8px 0;
+  align-items:flex-start;
+}
+
 /* ════════════════════════════════════════
    HOSPITAL TEMPLATE — RadhaKrishna style
    Screen: 340×540px (1.667× of CR80 for crisp preview)
@@ -664,35 +680,39 @@ input[type=range]{flex:1;}
     margin:0 !important;
     page-break-inside:avoid !important;
   }
-  /* ═══ Hospital template: CR80 cards in A4 grid ═══
-     body gets 'pmode-hospital' class when hospital template is active.
-     This prevents pmode-pair's page-break-after:always from applying.
-     Screen: 340×540px  →  zoom:0.6  →  204px×324px = 54mm×85.6mm per card.
-     3 cols × 3 rows = 9 cards per A4 page */
+  /* ═══ Hospital template: 3×3 CR80 grid on A4 ═══
+     hosp-page = 1 A4 page (9 cards: 3 rows × 3 cols)
+     hosp-row  = 1 row of 3 cards at zoom:0.6 each
+     Screen: 340×540px  →  Print zoom:0.6  →  204×324px = 54×85.6mm (CR80) */
 
-  /* Flex-wrap container for A4 grid */
-  body.pmode-hospital #preview{
-    display:flex !important;
-    flex-wrap:wrap !important;
-    align-content:flex-start !important;
-    justify-content:flex-start !important;
-    gap:3mm !important;
+  /* Each A4 page: exactly 9 cards, then force new page */
+  body.pmode-hospital .hosp-page{
+    page-break-after:always !important;
+    break-after:page !important;
+    page-break-inside:avoid !important;
     padding:8mm !important;
     box-sizing:border-box !important;
     width:210mm !important;
+    display:block !important;
   }
-  /* Row wrapper: fit to card size, NO forced page break */
-  body.pmode-hospital .print-row{
-    page-break-after:auto !important;   /* override pmode-pair's 'always' */
+  body.pmode-hospital .hosp-page:last-child{
+    page-break-after:auto !important;
     break-after:auto !important;
+  }
+  /* Each row: 3 cards side-by-side with small gap */
+  body.pmode-hospital .hosp-row{
+    display:flex !important;
+    flex-direction:row !important;
+    align-items:flex-start !important;
+    gap:3mm !important;
+    margin-bottom:3mm !important;
     page-break-inside:avoid !important;
     break-inside:avoid !important;
-    padding:0 !important;
-    margin:0 !important;
-    display:block !important;
-    width:fit-content !important;       /* only take card-wide space, not full page */
   }
-  /* Individual card at CR80 size */
+  body.pmode-hospital .hosp-row:last-child{
+    margin-bottom:0 !important;
+  }
+  /* Individual card at CR80 (zoom:0.6 of 340×540px) */
   .htmpl{
     zoom:0.6 !important;
     border-radius:0 !important;
