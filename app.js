@@ -569,6 +569,12 @@ function syncInputsToCurrent(){
     if(el) el.value = v;
     if(vl) vl.textContent = v + s.unit;
   });
+  // Hospital sign rotate button highlight
+  const curRotate = state.hospSignRotate || 0;
+  [0, 90, 180, 270].forEach(function(d){
+    const el = document.getElementById('hospRot' + d);
+    if (el) el.classList.toggle('active', d === curRotate);
+  });
   // Hospital colors
   ['hospColor1','hospColor2','hospColor3'].forEach(k=>{
     const el = document.getElementById(k);

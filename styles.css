@@ -444,9 +444,10 @@ input[type=range]{flex:1;}
   overflow:visible;
 }
 .htmpl-sign-img{
-  width:80px;
-  height:32px;
+  max-width:100%;
+  height:auto;
   object-fit:contain;
+  display:block;
 }
 .htmpl-sign-line{
   width:80px;
