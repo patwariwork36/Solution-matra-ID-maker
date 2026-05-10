@@ -800,14 +800,16 @@ input[type=range]{flex:1;}
   .card.portrait, .bcard.portrait{
     width:204px !important;height:324px !important;
     margin:0 !important;
-    box-shadow:none !important;border:none !important;
+    box-shadow:none !important;
+    border:1px solid var(--c-primary,#1a3a6e) !important;
     border-radius:0 !important;overflow:hidden !important;
     page-break-inside:avoid !important;
   }
   .card.landscape, .bcard.landscape{
     width:324px !important;height:204px !important;
     margin:0 !important;
-    box-shadow:none !important;border:none !important;
+    box-shadow:none !important;
+    border:1px solid var(--c-primary,#1a3a6e) !important;
     border-radius:0 !important;overflow:hidden !important;
     page-break-inside:avoid !important;
   }
