@@ -172,6 +172,24 @@
         <span class="slider-val" id="hospPhotoHVal">225px</span>
       </div>
 
+      <!-- Watermark Controls -->
+      <div class="font-block" style="margin-top:8px">
+        <div class="font-block-title">🖼️ Logo Watermark (Hospital Card)</div>
+        <div class="slider-row">
+          <label>Watermark Size</label>
+          <input type="range" id="hospWmSize" min="60" max="320" value="160"
+                 oninput="updateHospSize('hospWmSize',this.value,'hospWmSizeVal','px')"/>
+          <span class="slider-val" id="hospWmSizeVal">160px</span>
+        </div>
+        <div class="slider-row">
+          <label>Opacity</label>
+          <input type="range" id="hospWmOpacity" min="1" max="40" value="8"
+                 oninput="updateHospSize('hospWmOpacity',this.value,'hospWmOpacityVal','%')"/>
+          <span class="slider-val" id="hospWmOpacityVal">8%</span>
+        </div>
+        <div style="font-size:9px;color:#888;margin-top:4px;">Logo & Signature section mein logo upload hone ke baad watermark dikhega</div>
+      </div>
+
       <label style="margin-top:10px">Right-side caption text (near signature)</label>
       <input type="text" id="hospSignCaption" placeholder="e.g. डॉ. रमेश कुमार" oninput="updateGlobal('hospSignCaption',this.value)"/>
       <div class="slider-row">

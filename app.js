@@ -81,6 +81,9 @@ const DEFAULT_STATE = {
   hospSubSize: 8.2,       // sub heading font size
   hospTaglineSize: 12,    // tagline font size
   hospRowSize: 14,        // field rows font size
+  // Watermark
+  hospWmSize: 160,        // watermark size in px
+  hospWmOpacity: 8,       // watermark opacity in percent (1-30)
   // Per-field text controls (Name / Designation / Contact)
   hospNameSize: 14, hospNameBold: true,  hospNameItalic: false, hospNameOffsetY: 0,
   hospDesigSize: 12, hospDesigBold: false, hospDesigItalic: false, hospDesigOffsetY: 0,
@@ -571,7 +574,10 @@ function syncInputsToCurrent(){
     {id:'hospDesigSize',      valId:'hospDesigSizeVal',      key:'hospDesigSize',      def:12,   unit:'px'},
     {id:'hospDesigOffsetY',   valId:'hospDesigOffsetYVal',   key:'hospDesigOffsetY',   def:0,    unit:'px'},
     {id:'hospContSize',       valId:'hospContSizeVal',       key:'hospContSize',       def:12,   unit:'px'},
-    {id:'hospContOffsetY',    valId:'hospContOffsetYVal',    key:'hospContOffsetY',    def:0,    unit:'px'}
+    {id:'hospContOffsetY',    valId:'hospContOffsetYVal',    key:'hospContOffsetY',    def:0,    unit:'px'},
+    // watermark
+    {id:'hospWmSize',         valId:'hospWmSizeVal',         key:'hospWmSize',         def:160,  unit:'px'},
+    {id:'hospWmOpacity',      valId:'hospWmOpacityVal',      key:'hospWmOpacity',      def:8,    unit:'%'}
   ];
   hSliders.forEach(s=>{
     const el = document.getElementById(s.id);
@@ -1094,6 +1100,9 @@ function updateHospSize(sliderId, value, valSpanId, unit){
     hospSubSize:         'hospSubSize',
     hospTaglineSize:     'hospTaglineSize',
     hospRowSize:         'hospRowSize',
+    // watermark
+    hospWmSize:          'hospWmSize',
+    hospWmOpacity:       'hospWmOpacity',
     // per-field sizes & positions
     hospNameSize:        'hospNameSize',
     hospNameOffsetY:     'hospNameOffsetY',
@@ -1180,6 +1189,13 @@ function renderHospital(p){
   // Logo SVG uses cName2 (Word2 color) as primary and cName1 (Word1) as accent
   const c1 = cName2; const c2 = cName1;
 
+  // Hospital watermark
+  const hospWmSize    = state.hospWmSize    != null ? state.hospWmSize    : 160;
+  const hospWmOpacity = (state.hospWmOpacity != null ? state.hospWmOpacity : 8) / 100;
+  const wmHtml = state.logo
+    ? '<img class="htmpl-wm" src="' + state.logo + '" style="width:' + hospWmSize + 'px;height:' + hospWmSize + 'px;opacity:' + hospWmOpacity + ';"/>'
+    : '';
+
   // Default brand split — "Radha" + "Krishna" but allow user-provided name
   const fullName = (state.hospName || 'RadhaKrishna').trim();
   // Try to split intelligently: if user wrote "RadhaKrishna" (camelCase) split there
@@ -1259,6 +1275,7 @@ function renderHospital(p){
 
   return '<div class="card-pair"><div class="card-label">' + escapeHtml(p.name||'') + '</div>' +
     '<div class="htmpl">' +
+      wmHtml +
       '<div class="htmpl-inner">' +
         '<div class="htmpl-padding">' +
           '<div class="htmpl-header">' + logoHtml +

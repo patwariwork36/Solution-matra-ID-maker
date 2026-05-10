@@ -240,20 +240,21 @@ input[type=range]{flex:1;}
 
 /* PORTRAIT FRONT - many sizes are now driven by inline CSS variables */
 .portrait .wm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:0;pointer-events:none;object-fit:contain;}
-.portrait .fh{background:linear-gradient(135deg,var(--c-primary) 0%,var(--c-primary-dark) 100%);width:204px;height:88px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0 10px;flex-shrink:0;}
+/* All front-card content elements get position:relative so they stack ABOVE the z-index:0 watermark */
+.portrait .fh{background:linear-gradient(135deg,var(--c-primary) 0%,var(--c-primary-dark) 100%);width:204px;height:88px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0 10px;flex-shrink:0;position:relative;}
 .portrait .logo{width:28px;height:28px;object-fit:contain;}
 .portrait .oh1{font-family:'Noto Sans Devanagari',sans-serif;color:var(--c-header-text);font-weight:900;text-align:center;line-height:1.45;}
 .portrait .oh2{font-family:'Noto Sans Devanagari',sans-serif;font-weight:700;color:rgba(255,255,255,0.92);text-align:center;line-height:1.4;}
-.portrait .strip{background:var(--c-strip);width:204px;height:12px;display:flex;align-items:center;justify-content:center;font-size:5.5px;font-weight:900;color:var(--c-strip-text);letter-spacing:1.5px;text-transform:uppercase;flex-shrink:0;}
-.portrait .pw{width:204px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.portrait .strip{background:var(--c-strip);width:204px;height:12px;display:flex;align-items:center;justify-content:center;font-size:5.5px;font-weight:900;color:var(--c-strip-text);letter-spacing:1.5px;text-transform:uppercase;flex-shrink:0;position:relative;}
+.portrait .pw{width:204px;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;}
 .portrait .pb{border:3px solid var(--c-photo-border);border-radius:5px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#e8edf5;flex-shrink:0;}
 .portrait .pb img{width:100%;height:100%;object-fit:cover;object-position:top center;}
-.portrait .nb{width:204px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 6px;flex-shrink:0;gap:2px;overflow:hidden;}
+.portrait .nb{width:204px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 6px;flex-shrink:0;gap:2px;overflow:hidden;position:relative;}
 .portrait .nm{font-weight:900;color:#111;text-align:center;line-height:1.2;word-break:break-word;}
 .portrait .po{font-weight:800;color:var(--c-primary);text-align:center;letter-spacing:1px;text-transform:uppercase;flex-shrink:0;}
-.portrait .dr{width:204px;height:18px;display:flex;align-items:center;justify-content:center;background:var(--c-dr-bg);border-top:1px solid #dde4f0;border-bottom:1px solid #dde4f0;flex-shrink:0;}
+.portrait .dr{width:204px;height:18px;display:flex;align-items:center;justify-content:center;background:var(--c-dr-bg);border-top:1px solid #dde4f0;border-bottom:1px solid #dde4f0;flex-shrink:0;position:relative;}
 .portrait .dt{font-weight:700;color:#222;text-align:center;}
-.portrait .sb{width:204px;height:68px;background:linear-gradient(180deg,var(--c-sb-bg-1),var(--c-sb-bg-2));border-top:2px solid var(--c-primary);display:flex;flex-direction:column;justify-content:center;flex-shrink:0;padding:4px 12px;}
+.portrait .sb{width:204px;height:68px;background:linear-gradient(180deg,var(--c-sb-bg-1),var(--c-sb-bg-2));border-top:2px solid var(--c-primary);display:flex;flex-direction:column;justify-content:center;flex-shrink:0;padding:4px 12px;position:relative;}
 .portrait .sb-inner{display:flex;flex-direction:column;gap:1px;width:100%;}
 .portrait .sb-inner.left{align-items:flex-start;}
 .portrait .sb-inner.center{align-items:center;}
@@ -262,7 +263,7 @@ input[type=range]{flex:1;}
 .portrait .si{object-fit:contain;}
 .portrait .sl{height:1.5px;background:var(--c-primary);border-radius:1px;}
 .portrait .sp{font-family:'Noto Sans Devanagari',sans-serif;font-weight:900;color:var(--c-primary);text-align:center;line-height:1.4;}
-.portrait .cs{width:204px;height:4px;background:linear-gradient(90deg,var(--c-stripe-1) 33%,var(--c-stripe-2) 33% 66%,var(--c-stripe-3) 66%);flex-shrink:0;}
+.portrait .cs{width:204px;height:4px;background:linear-gradient(90deg,var(--c-stripe-1) 33%,var(--c-stripe-2) 33% 66%,var(--c-stripe-3) 66%);flex-shrink:0;position:relative;}
 
 /* PORTRAIT BACK */
 .bcard.portrait .btop{background:var(--c-primary);width:204px;height:5px;flex-shrink:0;}
@@ -279,7 +280,7 @@ input[type=range]{flex:1;}
 
 /* LANDSCAPE FRONT */
 .landscape .wm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:0;pointer-events:none;object-fit:contain;}
-.landscape .fh{background:linear-gradient(135deg,var(--c-primary) 0%,var(--c-primary-dark) 100%);width:324px;height:54px;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 10px;flex-shrink:0;}
+.landscape .fh{background:linear-gradient(135deg,var(--c-primary) 0%,var(--c-primary-dark) 100%);width:324px;height:54px;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 10px;flex-shrink:0;position:relative;}
 .landscape .logo{width:38px;height:38px;object-fit:contain;}
 .landscape .header-text-l{flex:1;color:#fff;text-align:center;}
 .landscape .oh1{font-family:'Noto Sans Devanagari',sans-serif;color:var(--c-header-text);font-weight:900;line-height:1.4;}
@@ -299,7 +300,8 @@ input[type=range]{flex:1;}
 .landscape .si{object-fit:contain;}
 .landscape .sl{height:1px;background:var(--c-primary);}
 .landscape .sp{font-family:'Noto Sans Devanagari',sans-serif;font-weight:800;color:var(--c-primary);text-align:center;line-height:1.4;}
-.landscape .cs{width:324px;height:3px;background:linear-gradient(90deg,var(--c-stripe-1) 33%,var(--c-stripe-2) 33% 66%,var(--c-stripe-3) 66%);flex-shrink:0;}
+.landscape .strip{background:var(--c-strip);display:flex;align-items:center;justify-content:center;font-size:6px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;flex-shrink:0;position:relative;}
+.landscape .cs{width:324px;height:3px;background:linear-gradient(90deg,var(--c-stripe-1) 33%,var(--c-stripe-2) 33% 66%,var(--c-stripe-3) 66%);flex-shrink:0;position:relative;}
 
 /* LANDSCAPE BACK */
 .bcard.landscape .btop{background:var(--c-primary);width:324px;height:5px;flex-shrink:0;}
@@ -351,8 +353,19 @@ input[type=range]{flex:1;}
   outline-offset:-2px;
 }
 
+/* Hospital watermark — sits behind all content */
+.htmpl-wm{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  z-index:0;
+  pointer-events:none;
+  object-fit:contain;
+}
+
 /* Inner wrapper — always fills full 540px via flex:1.
-   JS applies scale() when content overflows. */
+   JS applies scale() when content overflows.
+   position:relative + z-index:1 keeps it above the watermark. */
 .htmpl-inner{
   display:flex;
   flex-direction:column;
@@ -360,6 +373,8 @@ input[type=range]{flex:1;}
   min-height:0;
   width:340px;
   transform-origin:top center;
+  position:relative;
+  z-index:1;
 }
 
 .htmpl-padding{
