@@ -81,6 +81,10 @@ const DEFAULT_STATE = {
   hospSubSize: 8.2,       // sub heading font size
   hospTaglineSize: 12,    // tagline font size
   hospRowSize: 14,        // field rows font size
+  // Per-field text controls (Name / Designation / Contact)
+  hospNameSize: 14, hospNameBold: true,  hospNameItalic: false, hospNameOffsetY: 0,
+  hospDesigSize: 12, hospDesigBold: false, hospDesigItalic: false, hospDesigOffsetY: 0,
+  hospContSize: 12, hospContBold: false,  hospContItalic: false, hospContOffsetY: 0,
   colors: Object.assign({}, DEFAULT_COLORS),
   fonts: Object.assign({}, DEFAULT_FONTS),
   logo: '', sign: '',
@@ -560,7 +564,14 @@ function syncInputsToCurrent(){
     {id:'hospBrandSize',      valId:'hospBrandSizeVal',      key:'hospBrandSize',      def:18,   unit:'px'},
     {id:'hospSubSize',        valId:'hospSubSizeVal',        key:'hospSubSize',        def:8.2,  unit:'px'},
     {id:'hospTaglineSize',    valId:'hospTaglineSizeVal',    key:'hospTaglineSize',    def:12,   unit:'px'},
-    {id:'hospRowSize',        valId:'hospRowSizeVal',        key:'hospRowSize',        def:14,   unit:'px'}
+    {id:'hospRowSize',        valId:'hospRowSizeVal',        key:'hospRowSize',        def:14,   unit:'px'},
+    // per-field text controls
+    {id:'hospNameSize',       valId:'hospNameSizeVal',       key:'hospNameSize',       def:14,   unit:'px'},
+    {id:'hospNameOffsetY',    valId:'hospNameOffsetYVal',    key:'hospNameOffsetY',    def:0,    unit:'px'},
+    {id:'hospDesigSize',      valId:'hospDesigSizeVal',      key:'hospDesigSize',      def:12,   unit:'px'},
+    {id:'hospDesigOffsetY',   valId:'hospDesigOffsetYVal',   key:'hospDesigOffsetY',   def:0,    unit:'px'},
+    {id:'hospContSize',       valId:'hospContSizeVal',       key:'hospContSize',       def:12,   unit:'px'},
+    {id:'hospContOffsetY',    valId:'hospContOffsetYVal',    key:'hospContOffsetY',    def:0,    unit:'px'}
   ];
   hSliders.forEach(s=>{
     const el = document.getElementById(s.id);
@@ -568,6 +579,21 @@ function syncInputsToCurrent(){
     const v = state[s.key] != null ? state[s.key] : s.def;
     if(el) el.value = v;
     if(vl) vl.textContent = v + s.unit;
+  });
+  // Sync Bold / Italic button active states for Name / Desig / Cont
+  const boolBtns = [
+    {id:'btn_hospNameBold',    key:'hospNameBold',    def:true},
+    {id:'btn_hospNameItalic',  key:'hospNameItalic',  def:false},
+    {id:'btn_hospDesigBold',   key:'hospDesigBold',   def:false},
+    {id:'btn_hospDesigItalic', key:'hospDesigItalic', def:false},
+    {id:'btn_hospContBold',    key:'hospContBold',    def:false},
+    {id:'btn_hospContItalic',  key:'hospContItalic',  def:false}
+  ];
+  boolBtns.forEach(b => {
+    const btn = document.getElementById(b.id);
+    if (!btn) return;
+    const val = state[b.key] != null ? state[b.key] : b.def;
+    btn.classList.toggle('active', !!val);
   });
   // Hospital sign rotate — sync slider + number input
   const curRotate = state.hospSignRotate || 0;
@@ -1067,12 +1093,29 @@ function updateHospSize(sliderId, value, valSpanId, unit){
     hospBrandSize:       'hospBrandSize',
     hospSubSize:         'hospSubSize',
     hospTaglineSize:     'hospTaglineSize',
-    hospRowSize:         'hospRowSize'
+    hospRowSize:         'hospRowSize',
+    // per-field sizes & positions
+    hospNameSize:        'hospNameSize',
+    hospNameOffsetY:     'hospNameOffsetY',
+    hospDesigSize:       'hospDesigSize',
+    hospDesigOffsetY:    'hospDesigOffsetY',
+    hospContSize:        'hospContSize',
+    hospContOffsetY:     'hospContOffsetY'
   };
   const stateKey = keyMap[sliderId];
   if(stateKey) state[stateKey] = numVal;
   const valEl = document.getElementById(valSpanId);
   if(valEl) valEl.textContent = numVal + unit;
+  render();
+  persist();
+}
+
+// Toggle bold/italic for a hospital field
+function toggleHospTextStyle(field, prop){
+  const key = 'hosp' + field + prop;   // e.g. hospNameBold
+  state[key] = !state[key];
+  const btn = document.getElementById('btn_' + key);
+  if(btn) btn.classList.toggle('active', state[key]);
   render();
   persist();
 }
@@ -1178,31 +1221,38 @@ function renderHospital(p){
     ? '<img class="htmpl-sign-img" src="' + state.sign + '" style="' + signImgStyle + '"/>'
     : '<div class="htmpl-sign-line"></div>';
 
-  // Field rows — auto-shrink font for long values so they stay on ONE line
+  // Per-field text style controls
+  const nameSize    = state.hospNameSize    != null ? state.hospNameSize    : 14;
+  const nameBold    = state.hospNameBold    != null ? state.hospNameBold    : true;
+  const nameItalic  = state.hospNameItalic  != null ? state.hospNameItalic  : false;
+  const nameOffsetY = state.hospNameOffsetY != null ? state.hospNameOffsetY : 0;
+
+  const desigSize    = state.hospDesigSize    != null ? state.hospDesigSize    : 12;
+  const desigBold    = state.hospDesigBold    != null ? state.hospDesigBold    : false;
+  const desigItalic  = state.hospDesigItalic  != null ? state.hospDesigItalic  : false;
+  const desigOffsetY = state.hospDesigOffsetY != null ? state.hospDesigOffsetY : 0;
+
+  const contSize    = state.hospContSize    != null ? state.hospContSize    : 12;
+  const contBold    = state.hospContBold    != null ? state.hospContBold    : false;
+  const contItalic  = state.hospContItalic  != null ? state.hospContItalic  : false;
+  const contOffsetY = state.hospContOffsetY != null ? state.hospContOffsetY : 0;
+
+  // Field rows — individual font controls per row
   const rows = [
-    {label:'NAME',        value:p.name    || ''},
-    {label:'DESIGNATION', value:p.post    || ''},
-    {label:'CONTACT',     value:p.contact || ''}
+    {label:'NAME',        value:p.name    || '', fs:nameSize,  bold:nameBold,  italic:nameItalic,  offsetY:nameOffsetY},
+    {label:'DESIGNATION', value:p.post    || '', fs:desigSize, bold:desigBold, italic:desigItalic, offsetY:desigOffsetY},
+    {label:'CONTACT',     value:p.contact || '', fs:contSize,  bold:contBold,  italic:contItalic,  offsetY:contOffsetY}
   ];
-  // Label column width ("DESIGNATION" = 11 chars)
-  const labelColW = Math.ceil(rowSize * 0.62 * 11) + 6;
-  // Value column available width (card 340 - padding 44 - label - colon 14)
-  const valueColW = 340 - 44 - labelColW - 14;
-  const charW = 0.55;  // approx char width as fraction of font-size
 
   const rowsHtml = rows.map(r => {
-    const vLen = (r.value || '').length;
-    // Auto-reduce font size for long values to try keeping on 1 line.
-    // But no ellipsis — full value ALWAYS shown (wrapping handled by fitHospitalCards scaling).
-    let valFS = rowSize;
-    if (vLen > 0) {
-      const maxFS = Math.floor(valueColW / (vLen * charW));
-      if (maxFS < rowSize) valFS = Math.max(8, maxFS);
-    }
-    const perValStyle = 'color:' + cValues + ';font-size:' + valFS + 'px;word-break:break-word;';
-    return '<div class="htmpl-row" style="font-size:' + rowSize + 'px;grid-template-columns:' + labelColW + 'px 14px 1fr;">' +
-      '<span class="htmpl-label" style="' + labelStyle + '">' + escapeHtml(r.label) + '</span>' +
-      '<span class="htmpl-colon" style="' + colonStyle + '">:</span>' +
+    const fw = r.bold   ? 'font-weight:700;' : 'font-weight:400;';
+    const fi = r.italic ? 'font-style:italic;' : 'font-style:normal;';
+    // Label+colon in one span (auto width), value fills the rest
+    const perLblStyle = labelStyle + 'font-size:' + r.fs + 'px;' + fw + fi + 'white-space:nowrap;';
+    const perValStyle = 'color:' + cValues + ';font-size:' + r.fs + 'px;' + fw + fi + 'word-break:break-word;overflow-wrap:anywhere;';
+    const rowOffsetStyle = r.offsetY ? 'margin-top:' + r.offsetY + 'px;' : '';
+    return '<div class="htmpl-row" style="font-size:' + r.fs + 'px;grid-template-columns:auto 1fr;gap:6px;align-items:baseline;' + rowOffsetStyle + '">' +
+      '<span class="htmpl-label" style="' + perLblStyle + '">' + escapeHtml(r.label) + ' :</span>' +
       '<span class="htmpl-value" style="' + perValStyle + '">' + escapeHtml(r.value) + '</span>' +
     '</div>';
   }).join('');

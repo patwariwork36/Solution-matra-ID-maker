@@ -202,8 +202,71 @@
         </div>
       </div>
 
+      <!-- ── Per-field text controls: Name / Designation / Contact ── -->
       <div class="font-block" style="margin-top:10px">
-        <div class="font-block-title">Font Sizes</div>
+        <div class="font-block-title">🔤 Name / Designation / Contact — Label + Value Font Size</div>
+
+        <!-- NAME row -->
+        <div class="field-style-card">
+          <div class="field-style-label">NAME</div>
+          <div class="slider-row">
+            <label>"NAME" + typed name size</label>
+            <input type="range" id="hospNameSize" min="8" max="22" step="0.5" value="14"
+                   oninput="updateHospSize('hospNameSize',this.value,'hospNameSizeVal','px')"/>
+            <span class="slider-val" id="hospNameSizeVal">14px</span>
+          </div>
+          <div class="text-style-row">
+            <button id="btn_hospNameBold"   class="ts-btn active" onclick="toggleHospTextStyle('Name','Bold')"><b>B</b></button>
+            <button id="btn_hospNameItalic" class="ts-btn"        onclick="toggleHospTextStyle('Name','Italic')"><i>I</i></button>
+            <span class="ts-label">Position (Y)</span>
+            <input type="range" id="hospNameOffsetY" min="-20" max="20" step="1" value="0"
+                   oninput="updateHospSize('hospNameOffsetY',this.value,'hospNameOffsetYVal','px')"/>
+            <span class="slider-val" id="hospNameOffsetYVal">0px</span>
+          </div>
+        </div>
+
+        <!-- DESIGNATION row -->
+        <div class="field-style-card">
+          <div class="field-style-label">DESIGNATION</div>
+          <div class="slider-row">
+            <label>"DESIGNATION" + typed value size</label>
+            <input type="range" id="hospDesigSize" min="7" max="18" step="0.5" value="12"
+                   oninput="updateHospSize('hospDesigSize',this.value,'hospDesigSizeVal','px')"/>
+            <span class="slider-val" id="hospDesigSizeVal">12px</span>
+          </div>
+          <div class="text-style-row">
+            <button id="btn_hospDesigBold"   class="ts-btn" onclick="toggleHospTextStyle('Desig','Bold')"><b>B</b></button>
+            <button id="btn_hospDesigItalic" class="ts-btn" onclick="toggleHospTextStyle('Desig','Italic')"><i>I</i></button>
+            <span class="ts-label">Position (Y)</span>
+            <input type="range" id="hospDesigOffsetY" min="-20" max="20" step="1" value="0"
+                   oninput="updateHospSize('hospDesigOffsetY',this.value,'hospDesigOffsetYVal','px')"/>
+            <span class="slider-val" id="hospDesigOffsetYVal">0px</span>
+          </div>
+        </div>
+
+        <!-- CONTACT row -->
+        <div class="field-style-card">
+          <div class="field-style-label">CONTACT</div>
+          <div class="slider-row">
+            <label>"CONTACT" + phone number size</label>
+            <input type="range" id="hospContSize" min="7" max="18" step="0.5" value="12"
+                   oninput="updateHospSize('hospContSize',this.value,'hospContSizeVal','px')"/>
+            <span class="slider-val" id="hospContSizeVal">12px</span>
+          </div>
+          <div class="text-style-row">
+            <button id="btn_hospContBold"   class="ts-btn" onclick="toggleHospTextStyle('Cont','Bold')"><b>B</b></button>
+            <button id="btn_hospContItalic" class="ts-btn" onclick="toggleHospTextStyle('Cont','Italic')"><i>I</i></button>
+            <span class="ts-label">Position (Y)</span>
+            <input type="range" id="hospContOffsetY" min="-20" max="20" step="1" value="0"
+                   oninput="updateHospSize('hospContOffsetY',this.value,'hospContOffsetYVal','px')"/>
+            <span class="slider-val" id="hospContOffsetYVal">0px</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- existing Font Sizes block -->
+      <div class="font-block" style="margin-top:10px">
+        <div class="font-block-title">Font Sizes (Header / Tagline / Rows)</div>
         <div class="slider-row">
           <label>Main Heading</label>
           <input type="range" id="hospBrandSize" min="10" max="32" step="0.5" value="18" oninput="updateHospSize('hospBrandSize',this.value,'hospBrandSizeVal','px')"/>
