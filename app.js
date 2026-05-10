@@ -75,6 +75,8 @@ const DEFAULT_STATE = {
   hospPhotoSize: 200,     // single photo size (width); height = width*9/7 = passport ratio
   hospSignCaption: '',    // right-side caption near signature
   hospSignCaptionSize: 9, // caption font size in px
+  hospSignW: 120,         // signature image width in px
+  hospSignRotate: 0,      // signature rotation in degrees (0/90/180/270)
   hospBrandSize: 18,      // main heading font size
   hospSubSize: 8.2,       // sub heading font size
   hospTaglineSize: 12,    // tagline font size
@@ -554,6 +556,7 @@ function syncInputsToCurrent(){
     {id:'hospPhotoW',         valId:'hospPhotoWVal',         key:'hospPhotoW',         def:230,  unit:'px'},
     {id:'hospPhotoH',         valId:'hospPhotoHVal',         key:'hospPhotoH',         def:225,  unit:'px'},
     {id:'hospSignCaptionSize',valId:'hospSignCaptionSizeVal',key:'hospSignCaptionSize',def:9,    unit:'px'},
+    {id:'hospSignW',          valId:'hospSignWVal',          key:'hospSignW',          def:120,  unit:'px'},
     {id:'hospBrandSize',      valId:'hospBrandSizeVal',      key:'hospBrandSize',      def:18,   unit:'px'},
     {id:'hospSubSize',        valId:'hospSubSizeVal',        key:'hospSubSize',        def:8.2,  unit:'px'},
     {id:'hospTaglineSize',    valId:'hospTaglineSizeVal',    key:'hospTaglineSize',    def:12,   unit:'px'},
@@ -1054,6 +1057,7 @@ function updateHospSize(sliderId, value, valSpanId, unit){
     hospPhotoH:          'hospPhotoH',
     hospPhotoSize:       'hospPhotoSize',
     hospSignCaptionSize: 'hospSignCaptionSize',
+    hospSignW:           'hospSignW',
     hospBrandSize:       'hospBrandSize',
     hospSubSize:         'hospSubSize',
     hospTaglineSize:     'hospTaglineSize',
@@ -1066,6 +1070,18 @@ function updateHospSize(sliderId, value, valSpanId, unit){
   render();
   persist();
 }
+
+// Hospital signature rotation (0 / 90 / 180 / 270 degrees)
+function setHospSignRotate(deg){
+  state.hospSignRotate = deg;
+  [0, 90, 180, 270].forEach(function(d){
+    const el = document.getElementById('hospRot' + d);
+    if (el) el.classList.toggle('active', d === deg);
+  });
+  render();
+  persist();
+}
+
 
 function renderHospital(p){
   // --- Individual element colors (granular control) ---
@@ -1145,9 +1161,13 @@ function renderHospital(p){
       '</svg>';
   }
 
-  // Signature
+  // Signature — width + rotation controlled by sliders/buttons
+  const signW = state.hospSignW || 120;
+  const signRotate = state.hospSignRotate || 0;
+  const signImgStyle = 'width:' + signW + 'px;height:auto;display:block;' +
+    (signRotate ? 'transform:rotate(' + signRotate + 'deg);transform-origin:center center;' : '');
   const signHtml = state.sign
-    ? '<img class="htmpl-sign-img" src="' + state.sign + '"/>'
+    ? '<img class="htmpl-sign-img" src="' + state.sign + '" style="' + signImgStyle + '"/>'
     : '<div class="htmpl-sign-line"></div>';
 
   // Field rows — auto-shrink font for long values so they stay on ONE line
