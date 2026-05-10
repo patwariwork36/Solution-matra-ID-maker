@@ -1054,8 +1054,8 @@ function togglePanel(){
 // Close panel when user taps backdrop (outside panel)
 document.addEventListener('click', (e) => {
   if (!document.body.classList.contains('panel-open')) return;
-  // only on mobile (panel is fixed)
-  if (window.innerWidth > 900) return;
+  // only on mobile (panel is fixed overlay)
+  if (window.innerWidth > 767) return;
   const panel = document.getElementById('panel');
   const toggleBtn = document.querySelector('.mobile-toggle');
   if (!panel || !toggleBtn) return;

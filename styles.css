@@ -581,99 +581,205 @@ input[type=range]{flex:1;}
 }
 
 
+/* ════════════════════════════════════════
+   RESPONSIVE DESIGN
+   Desktop  > 1024px : 420px panel + preview (default)
+   Tablet  768-1024px : 320px panel + preview side-by-side
+   Mobile   < 768px  : full-width preview + slide-in panel drawer
    ════════════════════════════════════════ */
-@media (max-width: 900px),
-       (hover: none) and (pointer: coarse) {
-  /* Single column layout */
+
+/* ── TABLET (768 – 1024px) ── */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .app{
+    grid-template-columns: 320px 1fr;
+  }
+  .panel{
+    height:100vh;
+    overflow-y:auto;
+    padding:14px;
+  }
+  h1{font-size:15px;}
+  .subtitle{font-size:10px;}
+  h2{font-size:10.5px;}
+  label{font-size:10px;}
+  button{font-size:11px;padding:7px 10px;}
+  .slider-row label{flex:0 0 110px;font-size:9.5px;}
+  .slider-val{font-size:10px;width:36px;}
+  .theme-row{grid-template-columns:1fr 1fr;}
+  .theme-btn{font-size:10px;padding:8px 5px;}
+  .color-grid{grid-template-columns:1fr 1fr;}
+  .print-mode-grid{grid-template-columns:1fr 1fr;}
+  .pmode-btn{padding:8px 4px;min-height:80px;}
+  .pmode-btn .pm-desc{font-size:8.5px;}
+  .template-grid{grid-template-columns:1fr 1fr;}
+  /* Cards scale down slightly for tablet preview */
+  .card.portrait,.bcard.portrait{transform:scale(0.92);transform-origin:top center;}
+  .card.landscape,.bcard.landscape{transform:scale(0.92);transform-origin:top center;}
+  /* Field style cards */
+  .field-style-card{padding:6px 8px;}
+  .text-style-row{gap:5px;}
+  .ts-btn{width:26px;height:26px;font-size:11px;}
+  /* Hospital card in preview */
+  .htmpl{transform:scale(0.85);transform-origin:top center;}
+  /* Preview area */
+  .preview{padding:20px 16px;gap:20px;}
+}
+
+/* ── MOBILE (< 768px) ── */
+@media (max-width: 767px) {
+  /* Single column — preview is the main view */
   .app{
     display:block;
-    grid-template-columns:1fr;
   }
 
-  /* Show mobile toggle button */
+  /* Show hamburger button */
   .mobile-toggle{
-    display:flex;align-items:center;gap:6px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
   }
 
   /* Panel becomes a slide-in overlay drawer */
   .panel{
     position:fixed;
     top:0;left:-100%;
-    width:88%;max-width:420px;
+    width:88%;max-width:400px;
     height:100vh;height:100dvh;
     z-index:999;
-    box-shadow:6px 0 24px rgba(0,0,0,0.25);
-    transition:left 0.25s ease-out;
-    padding-top:60px; /* room for close hint */
+    box-shadow:8px 0 32px rgba(0,0,0,0.3);
+    transition:left 0.28s cubic-bezier(0.4,0,0.2,1);
+    padding:16px 16px 24px;
+    padding-top:68px;
     overflow-y:auto;overflow-x:hidden;
     -webkit-overflow-scrolling:touch;
   }
   body.panel-open .panel{left:0;}
 
-  /* Backdrop when panel open */
+  /* Dark backdrop when panel open */
   body.panel-open::before{
-    content:'';position:fixed;inset:0;
-    background:rgba(0,0,0,0.45);
+    content:'';
+    position:fixed;inset:0;
+    background:rgba(0,0,0,0.5);
     z-index:998;
+    backdrop-filter:blur(2px);
   }
 
-  /* Preview takes full width */
+  /* Preview fills full screen */
   .preview{
-    height:auto;min-height:100vh;min-height:100dvh;
-    padding:64px 12px 24px;
+    height:auto;
+    min-height:100vh;min-height:100dvh;
+    padding:68px 12px 32px;
     gap:20px;
+    align-items:center;
   }
 
-  /* Card label slightly smaller */
-  .card-label{font-size:10px;}
+  /* Headings */
+  h1{font-size:16px;}
+  .subtitle{font-size:10.5px;}
+  h2{font-size:12px;padding:14px 0 10px;}
 
-  /* Larger tap targets */
-  button{min-height:38px;padding:10px 14px;font-size:12.5px;}
+  /* Form fields — 14px+ to avoid iOS auto-zoom on focus */
+  label{font-size:12px;margin-bottom:5px;}
   input[type=text],input[type=tel],textarea,select{
-    padding:9px 10px;font-size:14px;  /* 14px+ avoids iOS zoom on focus */
-    min-height:40px;
+    padding:10px 11px;
+    font-size:14px;
+    min-height:44px;
   }
-  input[type=file]{font-size:13px;padding:8px 0;min-height:40px;}
-  label{font-size:11.5px;margin-bottom:4px;}
+  input[type=file]{font-size:13px;padding:8px 0;min-height:44px;}
 
-  /* Section toggles bigger and clearer */
-  h2{padding:14px 0 10px;font-size:11.5px;}
+  /* Buttons — large tap targets */
+  button{
+    min-height:44px;
+    padding:10px 14px;
+    font-size:13px;
+  }
 
-  /* Bigger color pickers for fingers */
-  .color-item input[type=color]{width:42px;height:32px;}
+  /* Sliders */
+  .slider-row{flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+  .slider-row label{flex:0 0 100%;font-size:11px;margin-bottom:0;}
+  input[type=range]{height:28px;width:100%;}
+  .slider-val{font-size:11px;width:44px;}
 
-  /* Sliders thicker on mobile */
-  input[type=range]{height:24px;}
+  /* Font block */
+  .font-block{padding:10px 11px;}
+  .font-block-title{font-size:11px;}
 
-  /* Theme grid 2-column on small screens */
+  /* Field style cards */
+  .field-style-card{padding:10px 11px;margin-bottom:10px;}
+  .field-style-label{font-size:11px;margin-bottom:7px;padding-bottom:5px;}
+  .text-style-row{gap:8px;margin-top:6px;}
+  .ts-btn{width:36px;height:36px;font-size:14px;}
+  .ts-label{font-size:11px;}
+
+  /* Color pickers */
+  .color-grid{grid-template-columns:1fr;}
+  .color-item{font-size:12px;}
+  .color-item input[type=color]{width:44px;height:32px;}
+
+  /* Theme buttons */
   .theme-row{grid-template-columns:1fr 1fr;gap:6px;}
   .theme-btn{padding:10px 6px;font-size:11px;min-height:44px;}
 
-  /* Print mode buttons stack 1-column */
-  .print-mode-grid{grid-template-columns:1fr;gap:6px;}
-  .pmode-btn{flex-direction:row;justify-content:flex-start;text-align:left;
-    padding:10px 12px;min-height:60px;gap:12px;
+  /* Print mode buttons — stack vertically */
+  .print-mode-grid{grid-template-columns:1fr;}
+  .pmode-btn{
+    flex-direction:row;justify-content:flex-start;text-align:left;
+    padding:12px 14px;min-height:64px;gap:14px;
   }
-  .pmode-btn .pm-icon{font-size:18px;}
-  .pmode-btn .pm-title{font-size:12px;}
-  .pmode-btn .pm-desc{font-size:10px;}
+  .pmode-btn .pm-icon{font-size:20px;}
+  .pmode-btn .pm-title{font-size:13px;}
+  .pmode-btn .pm-desc{font-size:10.5px;}
 
-  /* Color grid 1-column */
-  .color-grid{grid-template-columns:1fr;}
+  /* Template selector */
+  .template-grid{grid-template-columns:1fr 1fr;}
+  .tmpl-btn{padding:14px 6px;min-height:88px;}
+  .tmpl-btn .tm-icon{font-size:26px;}
+  .tmpl-btn .tm-title{font-size:13px;}
+  .tmpl-btn .tm-desc{font-size:10px;}
 
-  /* Person tabs: scrollable horizontally is fine */
-  .person-tabs{max-height:90px;}
+  /* Person tabs */
+  .person-tabs{max-height:100px;}
+  .person-tabs button{font-size:11px;padding:6px 10px;min-height:36px;}
 
-  /* Pos grid bigger */
-  .pos-cell{font-size:18px;}
+  /* Pos grid */
+  .pos-cell{font-size:20px;}
+
+  /* Sign preset row */
+  .sign-preset-row{grid-template-columns:repeat(3,1fr);gap:7px;}
+
+  /* Card label */
+  .card-label{font-size:11px;letter-spacing:0.5px;}
+
+  /* Cards: scale to fit mobile screen (portrait 204px wide) */
+  .card.portrait,.bcard.portrait{
+    transform:scale(1);transform-origin:top center;
+  }
+  /* Hospital card scales down more since it's 340px wide */
+  .htmpl{
+    transform:scale(0.88);transform-origin:top center;
+    margin-bottom:-44px; /* compensate scale gap */
+  }
+
+  /* Btn rows */
+  .btn-row{flex-wrap:wrap;gap:8px;}
+  .btn-row > *{flex:1;min-width:80px;}
 }
 
-/* Even smaller phones */
-@media (max-width: 380px){
-  .panel{width:94%;padding:12px;padding-top:60px;}
-  .preview{padding:60px 8px 20px;}
-  .card.portrait,.bcard.portrait{transform:scale(0.95);transform-origin:top center;}
+/* ── VERY SMALL phones (< 380px) ── */
+@media (max-width: 379px) {
+  .panel{width:95%;padding:12px;padding-top:68px;}
+  .preview{padding:68px 6px 20px;}
+  .card.portrait,.bcard.portrait{
+    transform:scale(0.9);transform-origin:top center;
+    margin-bottom:-20px;
+  }
+  .htmpl{
+    transform:scale(0.78);transform-origin:top center;
+    margin-bottom:-74px;
+  }
 }
+
 
 
 @media print{
