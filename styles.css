@@ -236,7 +236,7 @@ input[type=range]{flex:1;}
 .card.portrait,.bcard.portrait{width:204px;height:324px;}
 .card.landscape,.bcard.landscape{width:324px;height:204px;}
 
-.card,.bcard{border-radius:10px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.22);position:relative;background:#fff;print-color-adjust:exact;-webkit-print-color-adjust:exact;display:flex;flex-direction:column;}
+.card,.bcard{border-radius:10px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.22);position:relative;background:#fff;print-color-adjust:exact;-webkit-print-color-adjust:exact;display:flex;flex-direction:column;border:1px solid var(--c-primary);}
 
 /* PORTRAIT FRONT - many sizes are now driven by inline CSS variables */
 .portrait .wm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:0;pointer-events:none;object-fit:contain;}
