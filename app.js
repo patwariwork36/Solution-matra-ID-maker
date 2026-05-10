@@ -1304,12 +1304,17 @@ syncInputsToCurrent();
 renderTabs();
 // Apply current print mode body class + button highlight
 const initMode = state.printMode || 'pair';
-document.body.classList.add('pmode-' + initMode);
+const initTmpl = state.template || 'govt';
+// For hospital template, use pmode-hospital body class (prevents pmode-pair page-break conflict)
+if (initTmpl === 'hospital') {
+  document.body.classList.add('pmode-hospital');
+} else {
+  document.body.classList.add('pmode-' + initMode);
+}
 document.querySelectorAll('.pmode-btn').forEach(btn => {
   btn.classList.toggle('active', btn.dataset.mode === initMode);
 });
 // Apply current template button state (and toggle template-only sections)
-const initTmpl = state.template || 'govt';
 document.querySelectorAll('.tmpl-btn').forEach(btn => {
   btn.classList.toggle('active', btn.dataset.tmpl === initTmpl);
 });
