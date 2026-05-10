@@ -569,12 +569,12 @@ function syncInputsToCurrent(){
     if(el) el.value = v;
     if(vl) vl.textContent = v + s.unit;
   });
-  // Hospital sign rotate button highlight
+  // Hospital sign rotate — sync slider + number input
   const curRotate = state.hospSignRotate || 0;
-  [0, 90, 180, 270].forEach(function(d){
-    const el = document.getElementById('hospRot' + d);
-    if (el) el.classList.toggle('active', d === curRotate);
-  });
+  const rotSlider = document.getElementById('hospSignRotate');
+  const rotNum    = document.getElementById('hospSignRotateNum');
+  if (rotSlider) rotSlider.value = curRotate;
+  if (rotNum)    rotNum.value    = curRotate;
   // Hospital colors
   ['hospColor1','hospColor2','hospColor3'].forEach(k=>{
     const el = document.getElementById(k);
@@ -1077,13 +1077,15 @@ function updateHospSize(sliderId, value, valSpanId, unit){
   persist();
 }
 
-// Hospital signature rotation (0 / 90 / 180 / 270 degrees)
-function setHospSignRotate(deg){
+// Hospital signature continuous rotation (any angle 0–360)
+function setHospSignRotate(val){
+  const deg = Math.min(360, Math.max(0, parseFloat(val) || 0));
   state.hospSignRotate = deg;
-  [0, 90, 180, 270].forEach(function(d){
-    const el = document.getElementById('hospRot' + d);
-    if (el) el.classList.toggle('active', d === deg);
-  });
+  // Keep slider + number input in sync
+  const slider = document.getElementById('hospSignRotate');
+  const numEl  = document.getElementById('hospSignRotateNum');
+  if (slider) slider.value = deg;
+  if (numEl)  numEl.value  = deg;
   render();
   persist();
 }
