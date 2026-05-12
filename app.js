@@ -88,6 +88,39 @@ const DEFAULT_STATE = {
   hospNameSize: 14, hospNameBold: true,  hospNameItalic: false, hospNameOffsetY: 0,
   hospDesigSize: 12, hospDesigBold: false, hospDesigItalic: false, hospDesigOffsetY: 0,
   hospContSize: 12, hospContBold: false,  hospContItalic: false, hospContOffsetY: 0,
+  // ═══ Hospital v2 template fields ═══
+  h2Name: 'Radhakrishna',
+  h2Sub1: 'MULTI SPECIALIST HOSPITAL',
+  h2Sub2: 'MULTI SPECIALIST',
+  h2Address: 'Raipur Road Limahi, Balodabazar',
+  h2Phones: '7727233990, 8889895155',
+  h2PartnersLine: 'Cspdcl  Nuvoco  Aditya Birla  Sbi  Ayushman card',
+  h2HindiLine: 'इन सभी से निःशुल्क ईलाज की सेवा उपलब्ध है।',
+  h2HindiHighlight: 'निःशुल्क ईलाज',
+  h2UnitName: 'SAHU NURSING HOME UNIT 2',
+  h2UnitAddress: 'Main road limahi raipur road near balodabazar, chhattisgarh',
+  h2PartnerLogos: ['','','','',''],
+  h2PartnerNames: ['CSPDCL','NUVOCO','ADITYA BIRLA','SBI','AYUSHMAN CARD'],
+  // Hospital v2 colors
+  h2ColorName1:    '#1a8a92',  // word 1 (Radha) — teal
+  h2ColorName2:    '#163d5c',  // word 2 (krishna) — navy
+  h2ColorSubtitle: '#444444',
+  h2ColorDivider:  '#7a1a1a',
+  h2ColorBorder:   '#1a3a6e',
+  h2ColorName:     '#1a3a6e',  // big name color
+  h2ColorFooterBg: '#1a3a6e',  // blue footer background
+  h2ColorHighlight:'#ffd54f',  // yellow highlight
+  // Hospital v2 sizes
+  h2LogoSize: 54,
+  h2BackLogoSize: 80,
+  h2BrandSize: 24,
+  h2BackBrandSize: 26,
+  h2PhotoW: 230,
+  h2PhotoH: 240,
+  h2NameSize: 24,
+  h2DetailSize: 15,
+  h2SignW: 140,
+  h2SignRotate: 0,
   colors: Object.assign({}, DEFAULT_COLORS),
   fonts: Object.assign({}, DEFAULT_FONTS),
   logo: '', sign: '',
@@ -612,6 +645,51 @@ function syncInputsToCurrent(){
     const el = document.getElementById(k);
     if (el) el.value = state[k] || '';
   });
+
+  // ═══ Hospital v2 sync ═══
+  // Text fields
+  ['h2Name','h2Sub1','h2Sub2','h2Address','h2Phones','h2PartnersLine','h2HindiLine','h2HindiHighlight','h2UnitName','h2UnitAddress'].forEach(k=>{
+    const el = document.getElementById(k);
+    if (el) el.value = state[k] || '';
+  });
+  // Colors
+  ['h2ColorName1','h2ColorName2','h2ColorSubtitle','h2ColorDivider','h2ColorBorder','h2ColorName','h2ColorFooterBg','h2ColorHighlight'].forEach(k=>{
+    const el = document.getElementById(k);
+    if (el) el.value = state[k] || '';
+  });
+  // Size sliders
+  const h2Sliders = [
+    {id:'h2LogoSize',      valId:'h2LogoSizeVal',      key:'h2LogoSize',      def:54,  unit:'px'},
+    {id:'h2BackLogoSize',  valId:'h2BackLogoSizeVal',  key:'h2BackLogoSize',  def:80,  unit:'px'},
+    {id:'h2BrandSize',     valId:'h2BrandSizeVal',     key:'h2BrandSize',     def:24,  unit:'px'},
+    {id:'h2BackBrandSize', valId:'h2BackBrandSizeVal', key:'h2BackBrandSize', def:26,  unit:'px'},
+    {id:'h2PhotoW',        valId:'h2PhotoWVal',        key:'h2PhotoW',        def:230, unit:'px'},
+    {id:'h2PhotoH',        valId:'h2PhotoHVal',        key:'h2PhotoH',        def:240, unit:'px'},
+    {id:'h2NameSize',      valId:'h2NameSizeVal',      key:'h2NameSize',      def:24,  unit:'px'},
+    {id:'h2DetailSize',    valId:'h2DetailSizeVal',    key:'h2DetailSize',    def:15,  unit:'px'},
+    {id:'h2SignW',         valId:'h2SignWVal',         key:'h2SignW',         def:140, unit:'px'}
+  ];
+  h2Sliders.forEach(s=>{
+    const el = document.getElementById(s.id);
+    const vl = document.getElementById(s.valId);
+    const v = state[s.key] != null ? state[s.key] : s.def;
+    if(el) el.value = v;
+    if(vl) vl.textContent = v + s.unit;
+  });
+  // Sign rotate (slider + number input)
+  const h2Rot = state.h2SignRotate || 0;
+  const h2RotSlider = document.getElementById('h2SignRotate');
+  const h2RotNum    = document.getElementById('h2SignRotateNum');
+  if (h2RotSlider) h2RotSlider.value = h2Rot;
+  if (h2RotNum)    h2RotNum.value    = h2Rot;
+  // Partner names (loop 0..4)
+  if (Array.isArray(state.h2PartnerNames)){
+    for (let i = 0; i < 5; i++){
+      const el = document.getElementById('h2PartnerName' + i);
+      if (el) el.value = state.h2PartnerNames[i] || '';
+    }
+  }
+
   document.getElementById('signSize').value = state.signWidth || 96;
   document.getElementById('signSizeVal').textContent = (state.signWidth||96) + 'px';
   // sign cleaning settings
@@ -1071,13 +1149,17 @@ function setTemplate(tmpl){
   // Show/hide template-specific sections
   const govtSections = document.querySelectorAll('[data-tmpl-only="govt"]');
   const hospSections = document.querySelectorAll('[data-tmpl-only="hospital"]');
+  const hosp2Sections = document.querySelectorAll('[data-tmpl-only="hospital2"]');
   govtSections.forEach(s => s.style.display = (tmpl === 'govt') ? '' : 'none');
   hospSections.forEach(s => s.style.display = (tmpl === 'hospital') ? '' : 'none');
+  hosp2Sections.forEach(s => s.style.display = (tmpl === 'hospital2') ? '' : 'none');
 
   // Switch body pmode class so hospital print grid overrides pmode-pair page breaks
-  document.body.classList.remove('pmode-pair', 'pmode-duplex', 'pmode-grid', 'pmode-hospital');
+  document.body.classList.remove('pmode-pair', 'pmode-duplex', 'pmode-grid', 'pmode-hospital', 'pmode-hospital2');
   if (tmpl === 'hospital') {
     document.body.classList.add('pmode-hospital');
+  } else if (tmpl === 'hospital2') {
+    document.body.classList.add('pmode-hospital2');
   } else {
     // Restore saved print mode for govt template
     document.body.classList.add('pmode-' + (state.printMode || 'pair'));
@@ -1109,7 +1191,24 @@ function updateHospSize(sliderId, value, valSpanId, unit){
     hospDesigSize:       'hospDesigSize',
     hospDesigOffsetY:    'hospDesigOffsetY',
     hospContSize:        'hospContSize',
-    hospContOffsetY:     'hospContOffsetY'
+    hospContOffsetY:     'hospContOffsetY',
+    // Hospital v2 sizes
+    h2LogoSize:          'h2LogoSize',
+    h2BackLogoSize:      'h2BackLogoSize',
+    h2BrandSize:         'h2BrandSize',
+    h2BackBrandSize:     'h2BackBrandSize',
+    h2PhotoW:            'h2PhotoW',
+    h2PhotoH:            'h2PhotoH',
+    h2NameSize:          'h2NameSize',
+    h2DetailSize:        'h2DetailSize',
+    h2SignW:             'h2SignW',
+    // Hospital v2 back content sizes
+    h2BackTagSize:       'h2BackTagSize',
+    h2BackSubSize:       'h2BackSubSize',
+    h2BackPartnerSize:   'h2BackPartnerSize',
+    h2BackHindiSize:     'h2BackHindiSize',
+    h2BackUnitNameSize:  'h2BackUnitNameSize',
+    h2BackAddrSize:      'h2BackAddrSize'
   };
   const stateKey = keyMap[sliderId];
   if(stateKey) state[stateKey] = numVal;
@@ -1140,6 +1239,264 @@ function setHospSignRotate(val){
   if (numEl)  numEl.value  = deg;
   render();
   persist();
+}
+
+// ─── Hospital v2 helper functions ───
+function setH2SignRotate(val){
+  const deg = Math.min(360, Math.max(0, parseFloat(val) || 0));
+  state.h2SignRotate = deg;
+  const slider = document.getElementById('h2SignRotate');
+  const numEl  = document.getElementById('h2SignRotateNum');
+  if (slider) slider.value = deg;
+  if (numEl)  numEl.value  = deg;
+  render();
+  persist();
+}
+
+function loadPartnerLogo(ev, idx){
+  const file = ev.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = e => {
+    if (!Array.isArray(state.h2PartnerLogos)) state.h2PartnerLogos = ['','','','',''];
+    state.h2PartnerLogos[idx] = e.target.result;
+    render();
+    persist();
+  };
+  r.readAsDataURL(file);
+}
+
+function clearPartnerLogo(idx){
+  if (!Array.isArray(state.h2PartnerLogos)) state.h2PartnerLogos = ['','','','',''];
+  state.h2PartnerLogos[idx] = '';
+  // clear file input visually
+  const cells = document.querySelectorAll('.partner-logo-cell');
+  if (cells[idx]){
+    const fileInput = cells[idx].querySelector('input[type=file]');
+    if (fileInput) fileInput.value = '';
+  }
+  render();
+  persist();
+}
+
+function updatePartnerName(idx, val){
+  if (!Array.isArray(state.h2PartnerNames)) state.h2PartnerNames = ['','','','',''];
+  state.h2PartnerNames[idx] = val;
+  render();
+  persist();
+}
+
+// ─── Hospital v2 RENDER ───
+function renderHospital2Front(p){
+  const cName1     = state.h2ColorName1    || '#1a8a92';
+  const cName2     = state.h2ColorName2    || '#163d5c';
+  const cSubtitle  = state.h2ColorSubtitle || '#444444';
+  const cDivider   = state.h2ColorDivider  || '#4a1e00';  // dark brown
+  const cBorder    = state.h2ColorBorder   || '#1a3a6e';
+  const cName      = state.h2ColorName     || '#1a3a6e';
+  const cFooterBg  = state.h2ColorFooterBg || '#2668c8';  // lighter blue
+
+  const logoSize    = state.h2LogoSize    || 54;
+  const brandSize   = state.h2BrandSize   || 24;
+  const photoW      = state.h2PhotoW      || 230;
+  const photoH      = state.h2PhotoH      || 240;
+  const nameSize    = state.h2NameSize    || 24;
+  const detailSize  = state.h2DetailSize  || 15;
+  const signW       = state.h2SignW       || 140;
+  const signRotate  = state.h2SignRotate  || 0;
+
+  // Brand name split: by space first, else camelCase
+  const fullName = (state.h2Name || 'Radhakrishna').trim();
+  let brand1 = fullName, brand2 = '';
+  if (fullName.indexOf(' ') > -1){
+    const parts = fullName.split(' ');
+    brand1 = parts[0];
+    brand2 = parts.slice(1).join(' ');
+  } else {
+    const cap = fullName.match(/^([A-Z]?[a-z]+)([A-Z].*)$/);
+    if (cap){ brand1 = cap[1]; brand2 = cap[2]; }
+  }
+
+  // Logo
+  let logoHtml;
+  const logoSizeStyle = 'width:' + logoSize + 'px;height:' + logoSize + 'px;';
+  if (state.logo){
+    logoHtml = '<img class="htmpl2-logo" src="' + state.logo + '" style="' + logoSizeStyle + '"/>';
+  } else {
+    logoHtml = '<svg class="htmpl2-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="' + logoSizeStyle + '">' +
+      '<rect x="14" y="38" width="72" height="22" rx="2" fill="' + cName2 + '"/>' +
+      '<rect x="38" y="14" width="22" height="72" rx="2" fill="' + cName2 + '"/>' +
+      '<path d="M50 55 C 45 50, 40 50, 40 45 C 40 41, 44 39, 47 41 C 49 42, 50 44, 50 44 C 50 44, 51 42, 53 41 C 56 39, 60 41, 60 45 C 60 50, 55 50, 50 55 Z" fill="#fff"/>' +
+      '<path d="M48 16 Q 52 6, 60 4 Q 68 4, 70 8 Q 70 14, 64 18 Q 58 22, 52 18 Q 50 16, 48 16 Z" fill="' + cName1 + '"/>' +
+      '<ellipse cx="63" cy="11" rx="3.5" ry="2.5" fill="' + cName2 + '"/>' +
+      '<ellipse cx="63" cy="11" rx="1.5" ry="1" fill="#fff"/>' +
+      '<path d="M48 16 Q 50 10, 55 6" stroke="' + cName1 + '" stroke-width="1.5" fill="none" stroke-linecap="round"/>' +
+      '</svg>';
+  }
+
+  const photoHtml = p.photo
+    ? '<img src="' + p.photo + '"/>'
+    : '<span style="font-size:11px;color:#aaa;font-weight:600;">Upload photo</span>';
+
+  // Signature
+  const signImgStyle = 'width:' + signW + 'px;height:auto;display:block;' +
+    (signRotate ? 'transform:rotate(' + signRotate + 'deg);transform-origin:center center;' : '');
+  const signHtml = state.sign
+    ? '<img class="htmpl2-sign-img" src="' + state.sign + '" style="' + signImgStyle + '"/>'
+    : '<div class="htmpl2-sign-fallback"></div>';
+
+  const pinSvg = '<svg class="htmpl2-pin-icon" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>';
+
+  const fontMain  = state.h2FontMain  || 'Inter';
+  const fontHindi = state.h2FontHindi || 'Noto Sans Devanagari';
+
+  return '<div class="card-pair"><div class="card-label">Front — ' + escapeHtml(p.name||'') + '</div>' +
+    '<div class="htmpl2" style="font-family:\'' + fontMain + '\',sans-serif;">' +
+      '<div class="htmpl2-front-header">' + logoHtml +
+        '<div class="htmpl2-brand-block">' +
+          '<div class="htmpl2-brand-line" style="font-size:' + brandSize + 'px;">' +
+            '<span style="color:' + cName1 + ';">' + escapeHtml(brand1) + '</span>' +
+            (brand2 ? ' <span style="color:' + cName2 + ';">' + escapeHtml(brand2) + '</span>' : '') +
+          '</div>' +
+          '<div class="htmpl2-sub-line" style="color:' + cSubtitle + ';">' + escapeHtml(state.h2Sub1 || '') + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="htmpl2-divider" style="background:' + cDivider + ';"></div>' +
+      '<div class="htmpl2-photo-wrap">' +
+        '<div class="htmpl2-photo" style="border-color:' + cBorder + ';width:' + photoW + 'px;height:' + photoH + 'px;">' + photoHtml + '</div>' +
+      '</div>' +
+      '<div class="htmpl2-name" style="color:' + cName + ';font-size:' + nameSize + 'px;">' + escapeHtml(p.name || '') + '</div>' +
+      '<div class="htmpl2-bluefooter" style="background:' + cFooterBg + ';background-color:' + cFooterBg + ';">' +
+        '<div class="htmpl2-sign-area" style="margin-top:-14px;">' + signHtml +
+          '<div class="htmpl2-sign-label">Authorized Signature</div>' +
+        '</div>' +
+        '<div class="htmpl2-detail-row" style="font-size:' + detailSize + 'px;"><span class="lbl">Designation</span><span>:</span><span class="val">' + escapeHtml(p.post||'') + '</span></div>' +
+        '<div class="htmpl2-detail-row" style="font-size:' + detailSize + 'px;"><span class="lbl">Contact No.</span><span>:</span><span class="val">' + escapeHtml(p.contact||'') + '</span></div>' +
+        '<div class="htmpl2-divider-white"></div>' +
+        '<div class="htmpl2-address-block">' +
+          '<div class="htmpl2-address-title">' + pinSvg + ' Address</div>' +
+          '<div class="htmpl2-address-text" style="color:rgba(255,255,255,0.9);font-family:\'' + fontHindi + '\',sans-serif;">' + escapeHtml(state.h2Address||'') +
+            (state.h2Phones ? '<br>Phone No. ' + escapeHtml(state.h2Phones) : '') +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div></div>';
+}
+
+function renderHospital2Back(p){
+  const cName1     = state.h2ColorName1    || '#1a8a92';
+  const cName2     = state.h2ColorName2    || '#163d5c';
+  const cSubtitle  = state.h2ColorSubtitle || '#444444';
+  const cFooterBg  = state.h2ColorFooterBg || '#2668c8';  // lighter blue
+  const cHighlight = state.h2ColorHighlight|| '#ffd54f';
+
+  const logoSize    = state.h2BackLogoSize   || 80;
+  const brandSize   = state.h2BackBrandSize  || 26;
+  const backTagSize      = state.h2BackTagSize      || 18;
+  const backSubSize      = state.h2BackSubSize      || 11;
+  const backPartnerSize  = state.h2BackPartnerSize  || 13;
+  const backHindiSize    = state.h2BackHindiSize    || 13.5;
+  const backUnitNameSize = state.h2BackUnitNameSize || 16;
+  const backAddrSize     = state.h2BackAddrSize     || 11.5;
+
+  const fullName = (state.h2Name || 'Radhakrishna').trim();
+  let brand1 = fullName, brand2 = '';
+  if (fullName.indexOf(' ') > -1){
+    const parts = fullName.split(' ');
+    brand1 = parts[0];
+    brand2 = parts.slice(1).join(' ');
+  } else {
+    const cap = fullName.match(/^([A-Z]?[a-z]+)([A-Z].*)$/);
+    if (cap){ brand1 = cap[1]; brand2 = cap[2]; }
+  }
+
+  const logoSizeStyle = 'width:' + logoSize + 'px;height:' + logoSize + 'px;';
+  let logoHtml;
+  if (state.logo){
+    logoHtml = '<img class="htmpl2-back-logo" src="' + state.logo + '" style="' + logoSizeStyle + '"/>';
+  } else {
+    logoHtml = '<svg class="htmpl2-back-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="' + logoSizeStyle + '">' +
+      '<rect x="14" y="38" width="72" height="22" rx="2" fill="' + cName2 + '"/>' +
+      '<rect x="38" y="14" width="22" height="72" rx="2" fill="' + cName2 + '"/>' +
+      '<path d="M50 55 C 45 50, 40 50, 40 45 C 40 41, 44 39, 47 41 C 49 42, 50 44, 50 44 C 50 44, 51 42, 53 41 C 56 39, 60 41, 60 45 C 60 50, 55 50, 50 55 Z" fill="#fff"/>' +
+      '<path d="M48 16 Q 52 6, 60 4 Q 68 4, 70 8 Q 70 14, 64 18 Q 58 22, 52 18 Q 50 16, 48 16 Z" fill="' + cName1 + '"/>' +
+      '<ellipse cx="63" cy="11" rx="3.5" ry="2.5" fill="' + cName2 + '"/>' +
+      '<ellipse cx="63" cy="11" rx="1.5" ry="1" fill="#fff"/>' +
+      '<path d="M48 16 Q 50 10, 55 6" stroke="' + cName1 + '" stroke-width="1.5" fill="none" stroke-linecap="round"/>' +
+      '</svg>';
+  }
+
+  // Hindi line with yellow highlight
+  const hindiLine = state.h2HindiLine || '';
+  const highlight = state.h2HindiHighlight || '';
+  let hindiHtml = escapeHtml(hindiLine);
+  if (highlight && hindiLine.indexOf(highlight) !== -1){
+    hindiHtml = hindiLine.split(highlight).map(escapeHtml).join(
+      '<span style="color:' + cHighlight + ';font-weight:700;">' + escapeHtml(highlight) + '</span>'
+    );
+  }
+
+  // Partner logos (show only if logo OR name set)
+  const logos = Array.isArray(state.h2PartnerLogos) ? state.h2PartnerLogos : [];
+  const names = Array.isArray(state.h2PartnerNames) ? state.h2PartnerNames : [];
+  const partnerBoxes = [];
+  for (let i = 0; i < 5; i++){
+    const img = logos[i] || '';
+    const name = names[i] || '';
+    if (!img && !name) continue;
+    partnerBoxes.push(
+      '<div class="htmpl2-back-logo-box">' +
+        (img ? '<img src="' + img + '"/>' : escapeHtml(name)) +
+      '</div>'
+    );
+  }
+
+  const fontMain  = state.h2FontMain  || 'Inter';
+  const fontHindi = state.h2FontHindi || 'Noto Sans Devanagari';
+
+  return '<div class="card-pair"><div class="card-label">Back — ' + escapeHtml(p.name||'') + '</div>' +
+    '<div class="htmpl2" style="font-family:\'' + fontMain + '\',sans-serif;">' +
+      '<div class="htmpl2-back-top">' +
+        '<div class="htmpl2-back-logo-row">' + logoHtml +
+          '<div class="htmpl2-back-brand-block">' +
+            '<div class="htmpl2-back-brand" style="font-size:' + brandSize + 'px;">' +
+              '<span style="color:' + cName1 + ';">' + escapeHtml(brand1) + '</span>' +
+              (brand2 ? '&nbsp;<span style="color:' + cName2 + ';">' + escapeHtml(brand2) + '</span>' : '') +
+            '</div>' +
+            '<div class="htmpl2-back-tag-row">' +
+              '<span class="htmpl2-back-tag-line" style="background:' + cName2 + ';"></span>' +
+              '<span class="htmpl2-back-tag" style="color:#111;font-size:' + backTagSize + 'px;">' + escapeHtml(state.h2Sub2 || 'HOSPITAL') + '</span>' +
+              '<span class="htmpl2-back-tag-line" style="background:' + cName2 + ';"></span>' +
+            '</div>' +
+            (state.h2BackSubText ? '<div class="htmpl2-back-sub" style="color:' + cSubtitle + ';font-size:' + backSubSize + 'px;">' + escapeHtml(state.h2BackSubText) + '</div>' : '') +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="htmpl2-back-divider" style="background:' + cName2 + ';"></div>' +
+      '<div class="htmpl2-back-blue-half">' +
+        '<div class="htmpl2-back-middle" style="background:' + cFooterBg + ';background-color:' + cFooterBg + ';">' +
+          '<div class="htmpl2-back-partner-line" style="font-size:' + backPartnerSize + 'px;">' + escapeHtml(state.h2PartnersLine || '') + '</div>' +
+          '<div class="htmpl2-back-hindi" style="font-size:' + backHindiSize + 'px;font-family:\'' + fontHindi + '\',sans-serif;">' + hindiHtml + '</div>' +
+          (partnerBoxes.length ? '<div class="htmpl2-back-logos-row">' + partnerBoxes.join('') + '</div>' : '') +
+        '</div>' +
+        '<div class="htmpl2-back-footer" style="background:' + cFooterBg + ';background-color:' + cFooterBg + ';">' +
+          '<div class="htmpl2-back-unit-name" style="font-size:' + backUnitNameSize + 'px;">' + escapeHtml(state.h2UnitName||'') + '</div>' +
+          '<div class="htmpl2-back-footer-divider"></div>' +
+          '<div class="htmpl2-address-block" style="color:#fff;padding:0 4px;">' +
+            '<div class="htmpl2-address-title" style="color:#fff;font-size:' + backAddrSize + 'px;">' +
+              '<svg class="htmpl2-pin-icon" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>' +
+              ' Address' +
+            '</div>' +
+            '<div class="htmpl2-address-text" style="color:rgba(255,255,255,0.9);font-size:' + backAddrSize + 'px;">' + escapeHtml(state.h2Address||state.h2UnitAddress||'') +
+              (state.h2Phones ? '<br>Phone No. ' + escapeHtml(state.h2Phones) : '') +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div></div>';
+}
+
+function renderHospital2(p){
+  return renderHospital2Front(p) + renderHospital2Back(p);
 }
 
 
@@ -1353,6 +1710,8 @@ function render(){
   let fn;
   if (tmpl === 'hospital'){
     fn = renderHospital;
+  } else if (tmpl === 'hospital2'){
+    fn = renderHospital2;
   } else {
     fn = state.orient === 'portrait' ? renderPortrait : renderLandscape;
   }
@@ -1378,6 +1737,28 @@ function render(){
     const sizeNote = '<div class="hosp-size-note" style="font-size:10px;color:#888;text-align:center;margin-top:6px;letter-spacing:0.5px;">🖨️ Print size: <b>CR80 — 54 × 85.6 mm</b> (standard ID card) &nbsp;|&nbsp; 9 cards per A4 page</div>';
     document.getElementById('preview').innerHTML = html + sizeNote;
     fitHospitalCards();   // scale content to always fit 340×540
+    return;
+  }
+
+  // Hospital v2 template = front + back (1 person per row, both sides side-by-side)
+  if (tmpl === 'hospital2'){
+    if (mode === 'duplex'){
+      const fronts = state.people.map(p =>
+        '<div class="card-pair front-pair">' +
+        renderHospital2Front(p).replace(/^<div class="card-pair">/, '').replace(/<\/div>$/, '') +
+        '</div>'
+      );
+      const backs = state.people.map(p =>
+        '<div class="card-pair back-pair">' +
+        renderHospital2Back(p).replace(/^<div class="card-pair">/, '').replace(/<\/div>$/, '') +
+        '</div>'
+      );
+      html = fronts.join('') + backs.join('');
+    } else {
+      html = state.people.map(p => '<div class="print-row">' + fn(p) + '</div>').join('');
+    }
+    const sizeNote = '<div class="hosp-size-note" style="font-size:10px;color:#888;text-align:center;margin-top:6px;letter-spacing:0.5px;">🖨️ Print size: <b>CR80 — 54 × 85.6 mm</b> (standard ID card) &nbsp;|&nbsp; Hospital v2: Front + Back with partner logos</div>';
+    document.getElementById('preview').innerHTML = html + sizeNote;
     return;
   }
 
@@ -1414,6 +1795,8 @@ const initTmpl = state.template || 'govt';
 // For hospital template, use pmode-hospital body class (prevents pmode-pair page-break conflict)
 if (initTmpl === 'hospital') {
   document.body.classList.add('pmode-hospital');
+} else if (initTmpl === 'hospital2') {
+  document.body.classList.add('pmode-hospital2');
 } else {
   document.body.classList.add('pmode-' + initMode);
 }
@@ -1426,6 +1809,7 @@ document.querySelectorAll('.tmpl-btn').forEach(btn => {
 });
 document.querySelectorAll('[data-tmpl-only="govt"]').forEach(s => s.style.display = (initTmpl === 'govt') ? '' : 'none');
 document.querySelectorAll('[data-tmpl-only="hospital"]').forEach(s => s.style.display = (initTmpl === 'hospital') ? '' : 'none');
+document.querySelectorAll('[data-tmpl-only="hospital2"]').forEach(s => s.style.display = (initTmpl === 'hospital2') ? '' : 'none');
 applyPageSize();
 render();
 

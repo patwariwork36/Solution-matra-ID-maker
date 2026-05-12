@@ -1,55 +1,55 @@
 # 🪪 ID Card Maker Pro
 
-A free, offline-capable, browser-based ID card generator with **multiple templates** (Government, Hospital), bulk Excel import, themes, and full customization. Built with vanilla HTML + CSS + JavaScript — **no build step, no backend, no dependencies to install.**
+A free, offline-capable, browser-based ID card generator with **3 professional templates** (Government, Hospital v1, Hospital v2), bulk Excel import, full customization, and print-ready output. Built with vanilla HTML + CSS + JavaScript — **no build step, no backend.**
 
-> Originally designed for the **Office of SDM (Revenue), Palari, District Balodabazar–Bhatapara, Chhattisgarh** but fully customizable for any office, hospital, or organization.
-
----
+> Originally designed for the **Office of SDM (Revenue), Palari, District Balodabazar–Bhatapara, Chhattisgarh** but fully customizable.
 
 ## ✨ Features
 
-### 🎴 Multiple Templates
-- **🏛️ Government** — Patwari/Revenue style (CR80 portrait/landscape, two-sided)
-- **🏥 Hospital** — Medical/clinic style (RadhaKrishna design, single-side)
+### 🎴 Three Templates
+- **🏛️ Government** — Patwari/Revenue (CR80 portrait/landscape, dual-sided)
+- **🏥 Hospital v1** — Compact single-side medical card, granular controls, watermark
+- **🏨 Hospital v2** — Front + Back design with partner logos panel and Hindi banner (NEW!)
 
 ### 📦 Bulk Operations
-- **Excel + Photos ZIP import** — generate 100+ cards in seconds
-- **Profiles system** — save unlimited office configurations
-- **Auto-save** to browser localStorage + JSON export/import
+- Excel + Photos ZIP import — generate 100+ cards in seconds
+- Profiles system — save unlimited configurations
+- Auto-save + JSON export/import
 
-### 🎨 Full Customization
-- **8 preset themes** + custom color picker
-- **Live font controls** for every text element
-- **💧 Watermark** with size + opacity controls
-- **✍️ Smart signature** — auto background removal with 6 cleaning presets + ink color picker
+### 🎨 Full Customization (works on all 3 templates)
+- 8 preset themes + 13+ granular color pickers per template
+- Live font controls for every text element
+- Watermark with size + opacity
+- Smart signature cleaner — 6 presets + ink color picker + 0-360° rotation
+- Per-field text controls (bold, italic, position offset)
 
 ### 🖨️ Print Ready
-- **Exact CR80 size** (54×85.6mm portrait, 85.6×54mm landscape)
-- **3 print modes**: Pair, Duplex, Grid
-- **Color-forcing** for Chrome's print engine
+- Exact CR80 size (54×85.6mm)
+- 3 print modes: Pair, Duplex, Grid (Hospital v1: 9-up per A4)
+- Color-forcing for Chrome's print engine
 
 ### 📱 Mobile + Desktop
 - Touch device auto-detection
 - Slide-in drawer panel on mobile
-- Same tool, every device
+- Tablet-optimized layout
 
 ---
 
 ## 🚀 Quick Start
 
-### Open in Antigravity / VS Code
-1. Open the folder in Antigravity or VS Code
-2. Install **Live Server** extension (auto-suggested in `.vscode/extensions.json`)
+### Antigravity / VS Code
+1. Open the folder (`File → Open Folder`)
+2. Install **Live Server** extension (auto-suggested)
 3. Right-click `index.html` → "Open with Live Server"
-4. Edit live with hot reload
+4. Hot-reload at `http://localhost:5500`
 
-### Or just run locally
-- Double-click `index.html` — opens in browser, ready to use
+### Standalone
+- Double-click `index.html` — works offline in any modern browser
 
-### Deploy on GitHub Pages (free)
+### GitHub Pages (free hosting)
 1. Push to GitHub
-2. Settings → Pages → Branch: main, Folder: / (root)
-3. Visit `https://<your-username>.github.io/id-card-maker/`
+2. Settings → Pages → Branch: main → Save
+3. Live at `https://<your-username>.github.io/id-card-maker/`
 
 The included `.github/workflows/deploy.yml` auto-deploys on every push.
 
@@ -59,85 +59,86 @@ The included `.github/workflows/deploy.yml` auto-deploys on every push.
 
 ```
 id-card-maker/
-├── index.html              # Main entry point with full UI
-├── styles.css              # All styles (Govt + Hospital, mobile, print)
+├── index.html              # Main UI
+├── styles.css              # All styles (Govt + Hospital v1 + v2, mobile, print)
 ├── app.js                  # All logic
-├── samples/                # Test data (CSV + photos guide)
-├── docs/PRINT_GUIDE.md     # Detailed printing instructions
-├── .vscode/                # IDE config (settings + extensions)
-├── .github/workflows/      # Auto-deploy to GitHub Pages
+├── serve.py                # Optional local server (python3 serve.py)
 ├── README.md
 ├── LICENSE
-└── .gitignore
+├── .gitignore
+├── .vscode/                # IDE config
+└── .github/workflows/      # Auto-deploy
 ```
 
 ---
 
-## 🎴 Templates
+## 🎴 Template Guide
 
-### 🏛️ Government Template
-**Best for:** Patwari, Tehsildar, Forest, Police, any govt department  
-**Size:** CR80 portrait or landscape, dual-sided  
-**Excel columns:** `NAME, FATHER'S NAME, DOB, EMPLOYEE CODE, POST, BLOOD GROUP, CONTACT NUMBER, OFFICE ADRESS`
+### 🏛️ Government
+- **Excel columns:** `NAME, FATHER'S NAME, DOB, EMPLOYEE CODE, BLOOD GROUP, CONTACT NUMBER, OFFICE ADRESS, POST`
+- **Size:** CR80, dual-sided
 
-### 🏥 Hospital Template
-**Best for:** Hospital staff, clinic employees, nursing homes  
-**Size:** Portrait, single-side, 340×540px  
-**Theme colors:** Navy + Teal + Maroon (customizable)  
-**Excel columns:** `NAME, POST, BLOOD GROUP, CONTACT NUMBER`
+### 🏥 Hospital v1
+- **Excel columns:** `NAME, DESIGNATION, CONTACT, EMPLOYEE CODE`
+- **Size:** CR80 portrait single-side, 9 per A4
+- **Features:** 13 element colors, watermark, per-field controls, sign rotate 0-360°
+
+### 🏨 Hospital v2
+- **Excel columns:** `NAME, DESIGNATION, CONTACT, EMPLOYEE CODE`
+- **Size:** CR80, dual-sided (front + back)
+- **Features:**
+  - Front: Logo + brand + photo + name + designation + contact + address with phones
+  - Back: Bigger logo + partner schemes line + Hindi banner with yellow highlights + 5 partner logos panel + unit address
+  - Up to 5 uploadable partner logos (CSPDCL, NUVOCO, ADITYA BIRLA, SBI, AYUSHMAN CARD by default)
+  - 8 customizable element colors + 9 size sliders + signature rotation
 
 ---
 
-## 🛠️ Development Notes
+## 🛠️ Development
 
-### Key Functions in `app.js`:
-- `setTemplate(tmpl)` — switch between Government/Hospital
-- `renderPortrait(p)`, `renderLandscape(p)` — Govt render
-- `renderHospital(p)` — Hospital render
+### Key Functions (`app.js`)
+- `setTemplate(tmpl)` — switch templates
+- `renderHospital2Front(p)`, `renderHospital2Back(p)` — Hospital v2 render
+- `loadPartnerLogo()`, `clearPartnerLogo()` — Hospital v2 partner logos
+- `cleanSignatureBackground()` — sign cleaner
 - `doBulkImport()` — Excel + ZIP processing
-- `cleanSignatureBackground()` — Canvas-based sign cleaner
-- `saveProfile()`, `loadProfile()` — Profile system
-- `printCards()` — Print with mode-specific tips
+- `printCards()`, `saveProfile()` — print + profiles
 
-### CSS Sections in `styles.css`:
-- Body / panel / preview styles
-- Government template (`.portrait`, `.landscape`, `.bcard`)
-- Hospital template (`.htmpl-*`)
-- Mobile responsive (`@media (max-width: 900px)`)
-- Print styles (`@media print`)
+### CSS Sections (`styles.css`)
+- Govt template: `.portrait`, `.landscape`, `.bcard`
+- Hospital v1: `.htmpl-*`
+- Hospital v2: `.htmpl2-*` + `.partner-logos-grid`
+- Mobile / Tablet / Print: `@media` queries
 
-### Adding a New Template
-1. Add CSS with unique class prefix (e.g. `.school-tmpl`)
-2. Add `renderSchool(p)` function in `app.js`
-3. Add template option in `setTemplate()` + HTML grid
-4. Add fields section with `data-tmpl-only="school"`
+### Adding a Template
+1. CSS with unique class prefix (e.g. `.school-*`)
+2. `renderSchool(p)` function
+3. Template option in `setTemplate()` + template-grid HTML
+4. Fields section with `data-tmpl-only="school"`
+5. Update `render()` dispatch
 
 ---
 
 ## 🖨️ Print Tips
 
-⚠️ Most important: **Background graphics: ON** in Chrome's print dialog (otherwise colors won't print).
+⚠️ **Background graphics: ON** in Chrome's print dialog (most important — colors won't print without this).
 
-- Scale: **100%** (not "Fit to page")
+- Scale: **100%** (NOT "Fit to page")
 - Margins: **None** or Default
 - Paper: A4 or CR80 cardstock (250+ GSM)
-
-See `docs/PRINT_GUIDE.md` for full guide.
 
 ---
 
 ## 🛡️ Data Safety
 
-- All data stored locally in browser (`localStorage`)
-- Photos/logos **never uploaded anywhere**
-- Use **💾 Save** regularly to download JSON backups
+- localStorage only — no server uploads
+- Photos/logos never leave your device
+- Use **💾 Save** for JSON backups
 
 ---
 
 ## 📜 License
 
-MIT License — free for personal, government, and commercial use.
-
----
+MIT — free for personal, government, and commercial use.
 
 **Made for offices that want professional ID cards without paying ₹50/card to a vendor.** 🪪

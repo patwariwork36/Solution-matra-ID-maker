@@ -11,6 +11,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Roboto:wght@400;500;700;900&family=Poppins:wght@400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&family=Lato:wght@400;700;900&family=Nunito:wght@400;600;700;800;900&family=Oswald:wght@400;500;600;700&family=Raleway:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=Playfair+Display:wght@400;500;700&family=Quicksand:wght@400;500;600;700&family=Comfortaa:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Hind:wght@400;500;600;700&family=Mukta:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -52,16 +55,21 @@
     <h2 onclick="toggleSection(this)">🎴 Template <span class="badge">NEW</span> <span class="arrow">▼</span></h2>
     <div class="section-content">
       <div class="hint">Choose card template style:</div>
-      <div class="template-grid">
+      <div class="template-grid template-grid-3">
         <button class="tmpl-btn active" data-tmpl="govt" onclick="setTemplate('govt')">
           <span class="tm-icon">🏛️</span>
           <span class="tm-title">Government</span>
-          <span class="tm-desc">Revenue / Patwari style<br>(default)</span>
+          <span class="tm-desc">Revenue / Patwari<br>style</span>
         </button>
         <button class="tmpl-btn" data-tmpl="hospital" onclick="setTemplate('hospital')">
           <span class="tm-icon">🏥</span>
-          <span class="tm-title">Hospital</span>
-          <span class="tm-desc">Medical / Clinic style<br>(NEW)</span>
+          <span class="tm-title">Hospital v1</span>
+          <span class="tm-desc">Single side<br>Compact</span>
+        </button>
+        <button class="tmpl-btn" data-tmpl="hospital2" onclick="setTemplate('hospital2')">
+          <span class="tm-icon">🏨</span>
+          <span class="tm-title">Hospital v2</span>
+          <span class="tm-desc">Front + Back<br>Partner logos</span>
         </button>
       </div>
     </div>
@@ -80,6 +88,12 @@
         <code>DESIGNATION</code> — post jaise Doctor, Nurse, Patwari<br>
         <code>CONTACT</code> — phone number<br>
         <code>EMPLOYEE CODE</code> — photo file name se match hoga<br>
+        <b>Photos:</b> <code>EmployeeCode.jpg</code> (ZIP mein)
+      </div>
+      <!-- Hospital v2 template columns hint -->
+      <div class="hint" data-tmpl-only="hospital2">
+        <b>Excel columns (Hospital v2):</b><br>
+        <code>NAME, DESIGNATION, CONTACT, EMPLOYEE CODE</code><br>
         <b>Photos:</b> <code>EmployeeCode.jpg</code> (ZIP mein)
       </div>
       <label>Excel file (.xlsx)</label>
@@ -304,6 +318,227 @@
           <label>Field Rows</label>
           <input type="range" id="hospRowSize" min="8" max="20" step="0.5" value="14" oninput="updateHospSize('hospRowSize',this.value,'hospRowSizeVal','px')"/>
           <span class="slider-val" id="hospRowSizeVal">14px</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- HOSPITAL v2 INFO SECTION                     -->
+    <!-- ═══════════════════════════════════════════ -->
+    <h2 onclick="toggleSection(this)" data-tmpl-only="hospital2">🏨 Hospital v2 Info <span class="arrow">▼</span></h2>
+    <div class="section-content" data-tmpl-only="hospital2">
+      <div class="hint">Front + Back design with partner logos panel. Hospital name 2 words: write as <code>Radha krishna</code> (space) ya <code>RadhaKrishna</code> (camelCase) — words ke alag colors lagenge.</div>
+
+      <label>Hospital Name (e.g. Radhakrishna or Radha krishna)</label>
+      <input type="text" id="h2Name" oninput="updateGlobal('h2Name',this.value)"/>
+
+      <label>Front Subtitle (e.g. MULTI SPECIALIST HOSPITAL)</label>
+      <input type="text" id="h2Sub1" oninput="updateGlobal('h2Sub1',this.value)"/>
+
+      <label>Back Subtitle (e.g. MULTI SPECIALIST)</label>
+      <input type="text" id="h2BackSubText" oninput="updateGlobal('h2BackSubText',this.value)"/>
+
+      <label>Back Big Tag (e.g. HOSPITAL)</label>
+      <input type="text" id="h2Sub2" oninput="updateGlobal('h2Sub2',this.value)"/>
+
+      <label style="margin-top:8px">Front Footer — Address</label>
+      <input type="text" id="h2Address" placeholder="e.g. Raipur Road Limahi, Balodabazar" oninput="updateGlobal('h2Address',this.value)"/>
+
+      <label>Front Footer — Phone Numbers</label>
+      <input type="text" id="h2Phones" placeholder="e.g. 7727233990, 8889895155" oninput="updateGlobal('h2Phones',this.value)"/>
+
+      <label style="margin-top:8px">Back — Partner Schemes Line</label>
+      <input type="text" id="h2PartnersLine" placeholder="Cspdcl Nuvoco Aditya Birla Sbi Ayushman card" oninput="updateGlobal('h2PartnersLine',this.value)"/>
+
+      <label>Back — Hindi Line</label>
+      <input type="text" id="h2HindiLine" placeholder="इन सभी से निःशुल्क ईलाज की सेवा उपलब्ध है।" oninput="updateGlobal('h2HindiLine',this.value)"/>
+
+      <label>Back — Highlight Words (yellow color me dikhega)</label>
+      <input type="text" id="h2HindiHighlight" placeholder="निःशुल्क ईलाज" oninput="updateGlobal('h2HindiHighlight',this.value)"/>
+
+      <!-- Partner Logos Grid -->
+      <label style="margin-top:8px">Partner Logos (up to 5 — empty slots auto-hide)</label>
+      <div class="partner-logos-grid">
+        <div class="partner-logo-cell">
+          <label>Logo 1</label>
+          <input type="file" accept="image/*" onchange="loadPartnerLogo(event, 0)"/>
+          <input type="text" id="h2PartnerName0" placeholder="Name (fallback)" oninput="updatePartnerName(0,this.value)"/>
+          <button class="btn-clear" onclick="clearPartnerLogo(0)" title="Clear">✕</button>
+        </div>
+        <div class="partner-logo-cell">
+          <label>Logo 2</label>
+          <input type="file" accept="image/*" onchange="loadPartnerLogo(event, 1)"/>
+          <input type="text" id="h2PartnerName1" placeholder="Name (fallback)" oninput="updatePartnerName(1,this.value)"/>
+          <button class="btn-clear" onclick="clearPartnerLogo(1)" title="Clear">✕</button>
+        </div>
+        <div class="partner-logo-cell">
+          <label>Logo 3</label>
+          <input type="file" accept="image/*" onchange="loadPartnerLogo(event, 2)"/>
+          <input type="text" id="h2PartnerName2" placeholder="Name (fallback)" oninput="updatePartnerName(2,this.value)"/>
+          <button class="btn-clear" onclick="clearPartnerLogo(2)" title="Clear">✕</button>
+        </div>
+        <div class="partner-logo-cell">
+          <label>Logo 4</label>
+          <input type="file" accept="image/*" onchange="loadPartnerLogo(event, 3)"/>
+          <input type="text" id="h2PartnerName3" placeholder="Name (fallback)" oninput="updatePartnerName(3,this.value)"/>
+          <button class="btn-clear" onclick="clearPartnerLogo(3)" title="Clear">✕</button>
+        </div>
+        <div class="partner-logo-cell">
+          <label>Logo 5</label>
+          <input type="file" accept="image/*" onchange="loadPartnerLogo(event, 4)"/>
+          <input type="text" id="h2PartnerName4" placeholder="Name (fallback)" oninput="updatePartnerName(4,this.value)"/>
+          <button class="btn-clear" onclick="clearPartnerLogo(4)" title="Clear">✕</button>
+        </div>
+      </div>
+
+      <label style="margin-top:8px">Back Footer — Unit Name</label>
+      <input type="text" id="h2UnitName" placeholder="e.g. SAHU NURSING HOME UNIT 2" oninput="updateGlobal('h2UnitName',this.value)"/>
+
+      <label>Back Footer — Address</label>
+      <input type="text" id="h2UnitAddress" placeholder="e.g. Main road limahi raipur road near balodabazar, chhattisgarh" oninput="updateGlobal('h2UnitAddress',this.value)"/>
+
+      <!-- Granular Element Colors -->
+      <label style="margin-top:10px">🎨 Element Colors</label>
+      <div class="color-grid">
+        <div class="color-item"><span>Word 1 color</span><input type="color" id="h2ColorName1" value="#1a8a92" oninput="updateGlobal('h2ColorName1',this.value)"/></div>
+        <div class="color-item"><span>Word 2 color (Dark Blue)</span><input type="color" id="h2ColorName2" value="#163d5c" oninput="updateGlobal('h2ColorName2',this.value)"/></div>
+        <div class="color-item"><span>Subtitle</span><input type="color" id="h2ColorSubtitle" onchange="updateGlobal('h2ColorSubtitle',this.value)"/></div>
+        <div class="color-item"><span>Divider line</span><input type="color" id="h2ColorDivider" onchange="updateGlobal('h2ColorDivider',this.value)"/></div>
+        <div class="color-item"><span>Photo border</span><input type="color" id="h2ColorBorder" onchange="updateGlobal('h2ColorBorder',this.value)"/></div>
+        <div class="color-item"><span>Name (front)</span><input type="color" id="h2ColorName" onchange="updateGlobal('h2ColorName',this.value)"/></div>
+        <div class="color-item"><span>Blue footer BG</span><input type="color" id="h2ColorFooterBg" onchange="updateGlobal('h2ColorFooterBg',this.value)"/></div>
+        <div class="color-item"><span>Highlight (yellow)</span><input type="color" id="h2ColorHighlight" onchange="updateGlobal('h2ColorHighlight',this.value)"/></div>
+      </div>
+
+      <!-- Font Style -->
+      <div class="font-block" style="margin-top:10px">
+        <div class="font-block-title">🖋️ Font Style</div>
+        <div class="slider-row" style="align-items:center;gap:8px">
+          <label style="flex:0 0 90px">Card Font</label>
+          <select id="h2FontMain" onchange="updateGlobal('h2FontMain',this.value)" style="flex:1;font-size:12px;padding:5px 6px;border:1px solid #c5d0e6;border-radius:6px;background:#fff;">
+            <option value="Inter">Inter (Default)</option>
+            <option value="Roboto">Roboto</option>
+            <option value="Poppins">Poppins</option>
+            <option value="Montserrat">Montserrat</option>
+            <option value="Lato">Lato</option>
+            <option value="Nunito">Nunito</option>
+            <option value="Oswald">Oswald</option>
+            <option value="Raleway">Raleway</option>
+            <option value="Open Sans">Open Sans</option>
+            <option value="Playfair Display">Playfair Display</option>
+            <option value="Quicksand">Quicksand</option>
+            <option value="Comfortaa">Comfortaa</option>
+            <option value="sans-serif">System Sans-Serif</option>
+          </select>
+        </div>
+        <div class="slider-row" style="align-items:center;gap:8px;margin-top:6px">
+          <label style="flex:0 0 90px">Hindi Font</label>
+          <select id="h2FontHindi" onchange="updateGlobal('h2FontHindi',this.value)" style="flex:1;font-size:12px;padding:5px 6px;border:1px solid #c5d0e6;border-radius:6px;background:#fff;">
+            <option value="Noto Sans Devanagari">Noto Sans Devanagari</option>
+            <option value="Hind">Hind</option>
+            <option value="Mukta">Mukta</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Size Controls -->
+      <label style="margin-top:10px">Size Controls</label>
+      <div class="slider-row">
+        <label>Logo Size (Front)</label>
+        <input type="range" id="h2LogoSize" min="30" max="150" value="54" oninput="updateHospSize('h2LogoSize',this.value,'h2LogoSizeVal','px')"/>
+        <span class="slider-val" id="h2LogoSizeVal">54px</span>
+      </div>
+      <div class="slider-row">
+        <label>Logo Size (Back)</label>
+        <input type="range" id="h2BackLogoSize" min="50" max="250" value="80" oninput="updateHospSize('h2BackLogoSize',this.value,'h2BackLogoSizeVal','px')"/>
+        <span class="slider-val" id="h2BackLogoSizeVal">80px</span>
+      </div>
+      <div class="slider-row">
+        <label>Brand Font (Front)</label>
+        <input type="range" id="h2BrandSize" min="14" max="32" step="0.5" value="24" oninput="updateHospSize('h2BrandSize',this.value,'h2BrandSizeVal','px')"/>
+        <span class="slider-val" id="h2BrandSizeVal">24px</span>
+      </div>
+      <div class="slider-row">
+        <label>Brand Font (Back)</label>
+        <input type="range" id="h2BackBrandSize" min="16" max="36" step="0.5" value="26" oninput="updateHospSize('h2BackBrandSize',this.value,'h2BackBrandSizeVal','px')"/>
+        <span class="slider-val" id="h2BackBrandSizeVal">26px</span>
+      </div>
+      <div class="slider-row">
+        <label>Photo Width</label>
+        <input type="range" id="h2PhotoW" min="150" max="300" value="230" oninput="updateHospSize('h2PhotoW',this.value,'h2PhotoWVal','px')"/>
+        <span class="slider-val" id="h2PhotoWVal">230px</span>
+      </div>
+      <div class="slider-row">
+        <label>Photo Height</label>
+        <input type="range" id="h2PhotoH" min="150" max="300" value="240" oninput="updateHospSize('h2PhotoH',this.value,'h2PhotoHVal','px')"/>
+        <span class="slider-val" id="h2PhotoHVal">240px</span>
+      </div>
+      <div class="slider-row">
+        <label>Name Font</label>
+        <input type="range" id="h2NameSize" min="16" max="32" step="0.5" value="24" oninput="updateHospSize('h2NameSize',this.value,'h2NameSizeVal','px')"/>
+        <span class="slider-val" id="h2NameSizeVal">24px</span>
+      </div>
+      <div class="slider-row">
+        <label>Detail Row Font</label>
+        <input type="range" id="h2DetailSize" min="10" max="20" step="0.5" value="15" oninput="updateHospSize('h2DetailSize',this.value,'h2DetailSizeVal','px')"/>
+        <span class="slider-val" id="h2DetailSizeVal">15px</span>
+      </div>
+
+      <!-- Back Side Font Sizes -->
+      <div class="font-block" style="margin-top:10px">
+        <div class="font-block-title">🔤 Back Side — Font Sizes</div>
+        <div class="slider-row">
+          <label>HOSPITAL (Big Tag)</label>
+          <input type="range" id="h2BackTagSize" min="12" max="30" step="0.5" value="18" oninput="updateHospSize('h2BackTagSize',this.value,'h2BackTagSizeVal','px')"/>
+          <span class="slider-val" id="h2BackTagSizeVal">18px</span>
+        </div>
+        <div class="slider-row">
+          <label>MULTI SPECIALIST</label>
+          <input type="range" id="h2BackSubSize" min="7" max="18" step="0.5" value="11" oninput="updateHospSize('h2BackSubSize',this.value,'h2BackSubSizeVal','px')"/>
+          <span class="slider-val" id="h2BackSubSizeVal">11px</span>
+        </div>
+        <div class="slider-row">
+          <label>Partner Schemes Line</label>
+          <input type="range" id="h2BackPartnerSize" min="8" max="20" step="0.5" value="13" oninput="updateHospSize('h2BackPartnerSize',this.value,'h2BackPartnerSizeVal','px')"/>
+          <span class="slider-val" id="h2BackPartnerSizeVal">13px</span>
+        </div>
+        <div class="slider-row">
+          <label>Hindi Line</label>
+          <input type="range" id="h2BackHindiSize" min="8" max="20" step="0.5" value="13.5" oninput="updateHospSize('h2BackHindiSize',this.value,'h2BackHindiSizeVal','px')"/>
+          <span class="slider-val" id="h2BackHindiSizeVal">13.5px</span>
+        </div>
+        <div class="slider-row">
+          <label>Unit Name</label>
+          <input type="range" id="h2BackUnitNameSize" min="10" max="24" step="0.5" value="16" oninput="updateHospSize('h2BackUnitNameSize',this.value,'h2BackUnitNameSizeVal','px')"/>
+          <span class="slider-val" id="h2BackUnitNameSizeVal">16px</span>
+        </div>
+        <div class="slider-row">
+          <label>Address Text</label>
+          <input type="range" id="h2BackAddrSize" min="7" max="16" step="0.5" value="11.5" oninput="updateHospSize('h2BackAddrSize',this.value,'h2BackAddrSizeVal','px')"/>
+          <span class="slider-val" id="h2BackAddrSizeVal">11.5px</span>
+        </div>
+      </div>
+
+      <!-- Signature controls (re-uses uploaded signature) -->
+      <div style="background:#f0f4ff;border-radius:8px;padding:10px 12px;margin-top:10px">
+        <label style="font-weight:700;color:#163d5c;margin-bottom:6px">✍️ Signature Controls (Hospital v2)</label>
+        <div class="slider-row">
+          <label>Sign Width</label>
+          <input type="range" id="h2SignW" min="40" max="220" value="140" oninput="updateHospSize('h2SignW',this.value,'h2SignWVal','px')"/>
+          <span class="slider-val" id="h2SignWVal">140px</span>
+        </div>
+        <label style="margin-top:6px">Rotate (0 – 360°)</label>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:4px">
+          <input type="range" id="h2SignRotate" min="0" max="360" value="0"
+                 oninput="setH2SignRotate(this.value)"
+                 style="flex:1"/>
+          <input type="number" id="h2SignRotateNum" min="0" max="360" value="0"
+                 oninput="setH2SignRotate(this.value)"
+                 style="width:54px;padding:3px 5px;border:1px solid #bbb;border-radius:4px;font-size:12px;text-align:center"/>
+          <span style="font-size:12px;color:#555">°</span>
+        </div>
+        <div class="hint" style="margin-top:8px;font-size:11px">
+          💡 Niche "Logo &amp; Signature" section me Auto Clean use karo background remove karne ke liye
         </div>
       </div>
     </div>

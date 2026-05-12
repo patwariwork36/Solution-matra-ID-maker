@@ -189,6 +189,7 @@ input[type=range]{flex:1;}
 
 /* Template selector */
 .template-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;}
+.template-grid.template-grid-3{grid-template-columns:1fr 1fr 1fr;}
 .tmpl-btn{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:12px 6px;background:#f7f9fc;color:#555;border:2px solid #e4e8ef;
@@ -580,6 +581,155 @@ input[type=range]{flex:1;}
   overflow:hidden;
 }
 
+/* ════════════════════════════════════════
+   HOSPITAL v2 — Front + Back design w/ partner logos
+   ════════════════════════════════════════ */
+
+/* Partner logos input grid (in control panel) */
+.partner-logos-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  background:#f7f9fc;
+  padding:8px;
+  border-radius:5px;
+  border:1px solid #e4e8ef;
+  margin-bottom:8px;
+}
+.partner-logo-cell{
+  display:flex;flex-direction:column;gap:4px;
+  padding:6px;
+  background:#fff;
+  border-radius:4px;
+  border:1px solid #e4e8ef;
+  position:relative;
+}
+.partner-logo-cell label{
+  font-size:10px;font-weight:700;color:#1a3a6e;margin:0;
+}
+.partner-logo-cell input[type=file]{
+  font-size:10px;margin:0;
+}
+.partner-logo-cell input[type=text]{
+  padding:4px 6px;font-size:11px;margin:0;
+}
+.partner-logo-cell .btn-clear{
+  position:absolute;top:4px;right:4px;
+  padding:2px 6px;font-size:10px;
+}
+
+/* Hospital v2 card container */
+.htmpl2{
+  width:340px;
+  height:540px;
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.22);
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  print-color-adjust:exact;
+  -webkit-print-color-adjust:exact;
+}
+
+/* ─── Front Side ─── */
+.htmpl2-front-header{
+  padding:18px 22px 6px;
+  display:flex;align-items:center;gap:10px;justify-content:center;
+}
+.htmpl2-logo{object-fit:contain;flex-shrink:0;}
+.htmpl2-brand-block{display:flex;flex-direction:column;line-height:1;}
+.htmpl2-brand-line{font-weight:800;letter-spacing:-0.4px;line-height:1.1;}
+.htmpl2-sub-line{font-size:10px;font-weight:700;color:#444;letter-spacing:2px;margin-top:3px;}
+.htmpl2-divider{height:3px;margin:4px 22px 8px;}
+
+.htmpl2-photo-wrap{display:flex;justify-content:center;padding:0 22px;flex-shrink:0;}
+.htmpl2-photo{
+  border:3px solid;border-radius:6px;overflow:hidden;
+  background:#e8edf5;display:flex;align-items:center;justify-content:center;
+}
+.htmpl2-photo img{width:100%;height:100%;object-fit:cover;object-position:top center;}
+
+.htmpl2-name{
+  text-align:center;font-weight:800;letter-spacing:-0.3px;
+  padding:10px 12px 12px;word-break:break-word;
+}
+
+.htmpl2-bluefooter{
+  flex:1;display:flex;flex-direction:column;
+  padding:8px 22px 12px;color:#fff;
+}
+.htmpl2-sign-area{
+  text-align:center;display:flex;flex-direction:column;align-items:center;
+  margin-bottom:6px;min-height:36px;
+}
+.htmpl2-sign-img{max-width:160px;height:auto;object-fit:contain;display:block;}
+.htmpl2-sign-fallback{width:140px;height:30px;border-bottom:1px solid #fff;}
+.htmpl2-sign-label{font-size:11px;font-weight:500;margin-top:2px;color:#fff;}
+
+.htmpl2-detail-row{
+  display:grid;grid-template-columns:120px 14px 1fr;
+  align-items:center;gap:6px;margin-bottom:4px;color:#fff;
+}
+.htmpl2-detail-row .lbl{font-weight:700;}
+.htmpl2-detail-row .val{font-weight:700;}
+
+.htmpl2-divider-white{height:1px;background:#fff;opacity:0.7;margin:8px 0 6px;}
+
+.htmpl2-address-block{text-align:center;}
+.htmpl2-address-title{
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  font-size:14px;font-weight:700;margin-bottom:2px;
+}
+.htmpl2-address-text{font-size:11.5px;font-weight:500;line-height:1.4;}
+.htmpl2-pin-icon{width:14px;height:14px;display:inline-block;}
+
+/* ─── Back Side ─── */
+.htmpl2-back-top{
+  padding:14px 18px;
+  display:flex;flex-direction:column;
+  flex:1;overflow:hidden;  /* white 50% */
+}
+.htmpl2-back-logo-row{
+  display:flex;flex-direction:row;
+  align-items:center;justify-content:center;
+  gap:0;flex:1;width:100%;
+}
+.htmpl2-back-logo{object-fit:contain;flex-shrink:0;margin-right:-10px;}
+.htmpl2-back-brand-block{display:flex;flex-direction:column;line-height:1.2;align-items:center;text-align:center;flex:1;margin-left:-5px;}
+.htmpl2-back-brand{font-weight:800;letter-spacing:-0.5px;}
+.htmpl2-back-tag-row{display:flex;align-items:center;gap:8px;margin-top:8px;width:100%;}
+.htmpl2-back-tag-line{height:1px;flex:1;min-width:14px;}
+.htmpl2-back-tag{font-size:18px;font-weight:800;letter-spacing:1.5px;}
+.htmpl2-back-sub{font-size:11px;font-weight:600;letter-spacing:4px;color:#444;margin-top:6px;text-align:center;}
+.htmpl2-back-divider{height:4px;width:90%;margin:0 auto;flex-shrink:0;}
+
+/* Blue half wrapper — takes exactly 50% */
+.htmpl2-back-blue-half{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+
+.htmpl2-back-middle{
+  flex:1;padding:10px 14px;color:#fff;
+  display:flex;flex-direction:column;gap:8px;
+  text-align:center;
+}
+.htmpl2-back-partner-line{text-align:center;font-size:13px;font-weight:700;}
+.htmpl2-back-hindi{
+  text-align:center;font-size:13.5px;font-weight:600;
+}
+.htmpl2-back-logos-row{display:flex;justify-content:space-between;align-items:center;gap:5px;margin:4px 0;}
+.htmpl2-back-logo-box{
+  flex:1;background:#fff;border-radius:6px;height:60px;
+  display:flex;align-items:center;justify-content:center;padding:4px;
+  font-size:8px;color:#333;text-align:center;font-weight:700;overflow:hidden;
+}
+.htmpl2-back-logo-box img{max-width:100%;max-height:100%;object-fit:contain;}
+
+.htmpl2-back-footer{padding:10px 14px 12px;color:#fff;text-align:center;}
+.htmpl2-back-unit-name{font-size:16px;font-weight:800;letter-spacing:0.5px;}
+.htmpl2-back-footer-divider{width:60px;height:1.5px;background:#fff;margin:5px auto;}
+.htmpl2-back-unit-addr{font-size:11.5px;font-weight:500;line-height:1.4;}
+
 
 /* ════════════════════════════════════════
    RESPONSIVE DESIGN
@@ -893,6 +1043,61 @@ input[type=range]{flex:1;}
     page-break-inside:avoid !important;
     break-inside:avoid !important;
   }
+
+  /* ═══ Hospital v2 template: Front + Back at CR80 size ═══
+     Screen: 340×540px  →  Print zoom:0.6  →  204×324px = 54×85.6mm (CR80)
+     Each person gets front+back side-by-side on one row                  */
+
+  body.pmode-hospital2 .print-row{
+    display:flex !important;
+    flex-direction:row !important;
+    align-items:flex-start !important;
+    justify-content:flex-start !important;
+    gap:5mm !important;
+    page-break-after:always !important;
+    page-break-inside:avoid !important;
+    break-after:page !important;
+    break-inside:avoid !important;
+    margin:0 !important;
+    padding:5mm !important;
+    width:auto !important;
+  }
+  body.pmode-hospital2 .print-row:last-child{
+    page-break-after:auto !important;
+    break-after:auto !important;
+  }
+
+  /* CR80 zoom — same as hospital v1 */
+  body.pmode-hospital2 .htmpl2{
+    zoom:0.6 !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    border:1px solid #000 !important;
+    box-sizing:border-box !important;
+    page-break-inside:avoid !important;
+    break-inside:avoid !important;
+  }
+
+  /* Duplex mode for hospital v2 */
+  body.pmode-hospital2 .card-pair.front-pair{
+    page-break-after:always !important;
+    break-after:page !important;
+    padding:5mm !important;margin:0 !important;
+    display:block !important;
+  }
+  body.pmode-hospital2 .card-pair.back-pair{
+    page-break-after:always !important;
+    break-after:page !important;
+    padding:5mm !important;margin:0 !important;
+    display:block !important;
+  }
+  body.pmode-hospital2 .card-pair:last-child{
+    page-break-after:auto !important;
+    break-after:auto !important;
+  }
+
+  /* Size note hidden in print */
+  body.pmode-hospital2 .hosp-size-note{display:none !important;}
 }
 
 /* Default page size — A4 since we now fit Front+Back on one page */
