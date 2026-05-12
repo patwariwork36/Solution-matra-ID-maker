@@ -89,7 +89,7 @@ const DEFAULT_STATE = {
   hospDesigSize: 12, hospDesigBold: false, hospDesigItalic: false, hospDesigOffsetY: 0,
   hospContSize: 12, hospContBold: false,  hospContItalic: false, hospContOffsetY: 0,
   // ═══ Hospital v2 template fields ═══
-  h2Name: 'Radhakrishna',
+  h2Name: 'RadhaKrishna',
   h2Sub1: 'MULTI SPECIALIST HOSPITAL',
   h2Sub2: 'MULTI SPECIALIST',
   h2Address: 'Raipur Road Limahi, Balodabazar',
@@ -1304,10 +1304,13 @@ function renderHospital2Front(p){
   const signW       = state.h2SignW       || 140;
   const signRotate  = state.h2SignRotate  || 0;
 
-  // Brand name split: by space first, else camelCase
-  const fullName = (state.h2Name || 'Radhakrishna').trim();
+  // Brand name split: specifically handle radhakrishna without space, then space, then camelCase
+  const fullName = (state.h2Name || 'RadhaKrishna').trim();
   let brand1 = fullName, brand2 = '';
-  if (fullName.indexOf(' ') > -1){
+  if (fullName.toLowerCase() === 'radhakrishna') {
+    brand1 = fullName.substring(0, 5);
+    brand2 = fullName.substring(5);
+  } else if (fullName.indexOf(' ') > -1){
     const parts = fullName.split(' ');
     brand1 = parts[0];
     brand2 = parts.slice(1).join(' ');
@@ -1351,31 +1354,33 @@ function renderHospital2Front(p){
 
   return '<div class="card-pair"><div class="card-label">Front — ' + escapeHtml(p.name||'') + '</div>' +
     '<div class="htmpl2" style="font-family:\'' + fontMain + '\',sans-serif;">' +
-      '<div class="htmpl2-front-header">' + logoHtml +
-        '<div class="htmpl2-brand-block">' +
-          '<div class="htmpl2-brand-line" style="font-size:' + brandSize + 'px;">' +
-            '<span style="color:' + cName1 + ';">' + escapeHtml(brand1) + '</span>' +
-            (brand2 ? ' <span style="color:' + cName2 + ';">' + escapeHtml(brand2) + '</span>' : '') +
+      '<div class="htmpl2-inner">' +
+        '<div class="htmpl2-front-header">' + logoHtml +
+          '<div class="htmpl2-brand-block">' +
+            '<div class="htmpl2-brand-line" style="font-size:' + brandSize + 'px;">' +
+              '<span style="color:' + cName1 + ';">' + escapeHtml(brand1) + '</span>' +
+              (brand2 ? ' <span style="color:' + cName2 + ';">' + escapeHtml(brand2) + '</span>' : '') +
+            '</div>' +
+            '<div class="htmpl2-sub-line" style="color:' + cSubtitle + ';">' + escapeHtml(state.h2Sub1 || '') + '</div>' +
           '</div>' +
-          '<div class="htmpl2-sub-line" style="color:' + cSubtitle + ';">' + escapeHtml(state.h2Sub1 || '') + '</div>' +
         '</div>' +
-      '</div>' +
-      '<div class="htmpl2-divider" style="background:' + cDivider + ';"></div>' +
-      '<div class="htmpl2-photo-wrap">' +
-        '<div class="htmpl2-photo" style="border-color:' + cBorder + ';width:' + photoW + 'px;height:' + photoH + 'px;">' + photoHtml + '</div>' +
-      '</div>' +
-      '<div class="htmpl2-name" style="color:' + cName + ';font-size:' + nameSize + 'px;">' + escapeHtml(p.name || '') + '</div>' +
-      '<div class="htmpl2-bluefooter" style="background:' + cFooterBg + ';background-color:' + cFooterBg + ';">' +
-        '<div class="htmpl2-sign-area" style="margin-top:-14px;">' + signHtml +
-          '<div class="htmpl2-sign-label">Authorized Signature</div>' +
+        '<div class="htmpl2-divider" style="background:' + cDivider + ';"></div>' +
+        '<div class="htmpl2-photo-wrap">' +
+          '<div class="htmpl2-photo" style="border-color:' + cBorder + ';width:' + photoW + 'px;height:' + photoH + 'px;">' + photoHtml + '</div>' +
         '</div>' +
-        '<div class="htmpl2-detail-row" style="font-size:' + detailSize + 'px;"><span class="lbl">Designation</span><span>:</span><span class="val">' + escapeHtml(p.post||'') + '</span></div>' +
-        '<div class="htmpl2-detail-row" style="font-size:' + detailSize + 'px;"><span class="lbl">Contact No.</span><span>:</span><span class="val">' + escapeHtml(p.contact||'') + '</span></div>' +
-        '<div class="htmpl2-divider-white"></div>' +
-        '<div class="htmpl2-address-block">' +
-          '<div class="htmpl2-address-title">' + pinSvg + ' Address</div>' +
-          '<div class="htmpl2-address-text" style="color:rgba(255,255,255,0.9);font-family:\'' + fontHindi + '\',sans-serif;">' + escapeHtml(state.h2Address||'') +
-            (state.h2Phones ? '<br>Phone No. ' + escapeHtml(state.h2Phones) : '') +
+        '<div class="htmpl2-name" style="color:' + cName + ';font-size:' + nameSize + 'px;">' + escapeHtml(p.name || '') + '</div>' +
+        '<div class="htmpl2-bluefooter" style="background:' + cFooterBg + ';background-color:' + cFooterBg + ';">' +
+          '<div class="htmpl2-sign-area" style="margin-top:-14px;">' + signHtml +
+            '<div class="htmpl2-sign-label">Authorized Signature</div>' +
+          '</div>' +
+          '<div class="htmpl2-detail-row" style="font-size:' + detailSize + 'px;"><span class="lbl">Designation</span><span>:</span><span class="val">' + escapeHtml(p.post||'') + '</span></div>' +
+          '<div class="htmpl2-detail-row" style="font-size:' + detailSize + 'px;"><span class="lbl">Contact No.</span><span>:</span><span class="val">' + escapeHtml(p.contact||'') + '</span></div>' +
+          '<div class="htmpl2-divider-white"></div>' +
+          '<div class="htmpl2-address-block">' +
+            '<div class="htmpl2-address-title">' + pinSvg + ' Address</div>' +
+            '<div class="htmpl2-address-text" style="color:rgba(255,255,255,0.9);font-family:\'' + fontHindi + '\',sans-serif;">' + escapeHtml(state.h2Address||'') +
+              (state.h2Phones ? '<br>Phone No. ' + escapeHtml(state.h2Phones) : '') +
+            '</div>' +
           '</div>' +
         '</div>' +
       '</div>' +
@@ -1398,9 +1403,12 @@ function renderHospital2Back(p){
   const backUnitNameSize = state.h2BackUnitNameSize || 16;
   const backAddrSize     = state.h2BackAddrSize     || 11.5;
 
-  const fullName = (state.h2Name || 'Radhakrishna').trim();
+  const fullName = (state.h2Name || 'RadhaKrishna').trim();
   let brand1 = fullName, brand2 = '';
-  if (fullName.indexOf(' ') > -1){
+  if (fullName.toLowerCase() === 'radhakrishna') {
+    brand1 = fullName.substring(0, 5);
+    brand2 = fullName.substring(5);
+  } else if (fullName.indexOf(' ') > -1){
     const parts = fullName.split(' ');
     brand1 = parts[0];
     brand2 = parts.slice(1).join(' ');
@@ -1455,39 +1463,41 @@ function renderHospital2Back(p){
 
   return '<div class="card-pair"><div class="card-label">Back — ' + escapeHtml(p.name||'') + '</div>' +
     '<div class="htmpl2" style="font-family:\'' + fontMain + '\',sans-serif;">' +
-      '<div class="htmpl2-back-top">' +
-        '<div class="htmpl2-back-logo-row">' + logoHtml +
-          '<div class="htmpl2-back-brand-block">' +
-            '<div class="htmpl2-back-brand" style="font-size:' + brandSize + 'px;">' +
-              '<span style="color:' + cName1 + ';">' + escapeHtml(brand1) + '</span>' +
-              (brand2 ? '&nbsp;<span style="color:' + cName2 + ';">' + escapeHtml(brand2) + '</span>' : '') +
+      '<div class="htmpl2-inner">' +
+        '<div class="htmpl2-back-top">' +
+          '<div class="htmpl2-back-logo-row">' + logoHtml +
+            '<div class="htmpl2-back-brand-block">' +
+              '<div class="htmpl2-back-brand" style="font-size:' + brandSize + 'px;">' +
+                '<span style="color:' + cName1 + ';">' + escapeHtml(brand1) + '</span>' +
+                (brand2 ? '&nbsp;<span style="color:' + cName2 + ';">' + escapeHtml(brand2) + '</span>' : '') +
+              '</div>' +
+              '<div class="htmpl2-back-tag-row">' +
+                '<span class="htmpl2-back-tag-line" style="background:' + cName2 + ';"></span>' +
+                '<span class="htmpl2-back-tag" style="color:#111;font-size:' + backTagSize + 'px;">' + escapeHtml(state.h2Sub2 || 'HOSPITAL') + '</span>' +
+                '<span class="htmpl2-back-tag-line" style="background:' + cName2 + ';"></span>' +
+              '</div>' +
+              (state.h2BackSubText ? '<div class="htmpl2-back-sub" style="color:' + cSubtitle + ';font-size:' + backSubSize + 'px;">' + escapeHtml(state.h2BackSubText) + '</div>' : '') +
             '</div>' +
-            '<div class="htmpl2-back-tag-row">' +
-              '<span class="htmpl2-back-tag-line" style="background:' + cName2 + ';"></span>' +
-              '<span class="htmpl2-back-tag" style="color:#111;font-size:' + backTagSize + 'px;">' + escapeHtml(state.h2Sub2 || 'HOSPITAL') + '</span>' +
-              '<span class="htmpl2-back-tag-line" style="background:' + cName2 + ';"></span>' +
-            '</div>' +
-            (state.h2BackSubText ? '<div class="htmpl2-back-sub" style="color:' + cSubtitle + ';font-size:' + backSubSize + 'px;">' + escapeHtml(state.h2BackSubText) + '</div>' : '') +
           '</div>' +
         '</div>' +
-      '</div>' +
-      '<div class="htmpl2-back-divider" style="background:' + cName2 + ';"></div>' +
-      '<div class="htmpl2-back-blue-half">' +
-        '<div class="htmpl2-back-middle" style="background:' + cFooterBg + ';background-color:' + cFooterBg + ';">' +
-          '<div class="htmpl2-back-partner-line" style="font-size:' + backPartnerSize + 'px;">' + escapeHtml(state.h2PartnersLine || '') + '</div>' +
-          '<div class="htmpl2-back-hindi" style="font-size:' + backHindiSize + 'px;font-family:\'' + fontHindi + '\',sans-serif;">' + hindiHtml + '</div>' +
-          (partnerBoxes.length ? '<div class="htmpl2-back-logos-row">' + partnerBoxes.join('') + '</div>' : '') +
-        '</div>' +
-        '<div class="htmpl2-back-footer" style="background:' + cFooterBg + ';background-color:' + cFooterBg + ';">' +
-          '<div class="htmpl2-back-unit-name" style="font-size:' + backUnitNameSize + 'px;">' + escapeHtml(state.h2UnitName||'') + '</div>' +
-          '<div class="htmpl2-back-footer-divider"></div>' +
-          '<div class="htmpl2-address-block" style="color:#fff;padding:0 4px;">' +
-            '<div class="htmpl2-address-title" style="color:#fff;font-size:' + backAddrSize + 'px;">' +
-              '<svg class="htmpl2-pin-icon" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>' +
-              ' Address' +
-            '</div>' +
-            '<div class="htmpl2-address-text" style="color:rgba(255,255,255,0.9);font-size:' + backAddrSize + 'px;">' + escapeHtml(state.h2Address||state.h2UnitAddress||'') +
-              (state.h2Phones ? '<br>Phone No. ' + escapeHtml(state.h2Phones) : '') +
+        '<div class="htmpl2-back-divider" style="background:' + cName2 + ';"></div>' +
+        '<div class="htmpl2-back-blue-half">' +
+          '<div class="htmpl2-back-middle" style="background:' + cFooterBg + ';background-color:' + cFooterBg + ';">' +
+            '<div class="htmpl2-back-partner-line" style="font-size:' + backPartnerSize + 'px;">' + escapeHtml(state.h2PartnersLine || '') + '</div>' +
+            '<div class="htmpl2-back-hindi" style="font-size:' + backHindiSize + 'px;font-family:\'' + fontHindi + '\',sans-serif;">' + hindiHtml + '</div>' +
+            (partnerBoxes.length ? '<div class="htmpl2-back-logos-row">' + partnerBoxes.join('') + '</div>' : '') +
+          '</div>' +
+          '<div class="htmpl2-back-footer" style="background:' + cFooterBg + ';background-color:' + cFooterBg + ';">' +
+            '<div class="htmpl2-back-unit-name" style="font-size:' + backUnitNameSize + 'px;">' + escapeHtml(state.h2UnitName||'') + '</div>' +
+            '<div class="htmpl2-back-footer-divider"></div>' +
+            '<div class="htmpl2-address-block" style="color:#fff;padding:0 4px;">' +
+              '<div class="htmpl2-address-title" style="color:#fff;font-size:' + backAddrSize + 'px;">' +
+                '<svg class="htmpl2-pin-icon" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>' +
+                ' Address' +
+              '</div>' +
+              '<div class="htmpl2-address-text" style="color:rgba(255,255,255,0.9);font-size:' + backAddrSize + 'px;">' + escapeHtml(state.h2Address||state.h2UnitAddress||'') +
+                (state.h2Phones ? '<br>Phone No. ' + escapeHtml(state.h2Phones) : '') +
+              '</div>' +
             '</div>' +
           '</div>' +
         '</div>' +
@@ -1555,12 +1565,21 @@ function renderHospital(p){
 
   // Default brand split — "Radha" + "Krishna" but allow user-provided name
   const fullName = (state.hospName || 'RadhaKrishna').trim();
-  // Try to split intelligently: if user wrote "RadhaKrishna" (camelCase) split there
+  // Try to split intelligently: specifically handle radhakrishna without space, then space, then camelCase
   let brandPart1 = fullName, brandPart2 = '';
-  const cap = fullName.match(/^([A-Z][a-z]+)([A-Z].*)$/);
-  if (cap){
-    brandPart1 = cap[1];
-    brandPart2 = cap[2];
+  if (fullName.toLowerCase() === 'radhakrishna') {
+    brandPart1 = fullName.substring(0, 5);
+    brandPart2 = fullName.substring(5);
+  } else if (fullName.indexOf(' ') > -1){
+    const parts = fullName.split(' ');
+    brandPart1 = parts[0];
+    brandPart2 = parts.slice(1).join(' ');
+  } else {
+    const cap = fullName.match(/^([A-Z][a-z]+)([A-Z].*)$/);
+    if (cap){
+      brandPart1 = cap[1];
+      brandPart2 = cap[2];
+    }
   }
 
   // Photo
@@ -1676,7 +1695,7 @@ function renderHospital(p){
 // In print, zoom:0.6 then maps the 340×540 card to exact CR80 size (54×85.6mm).
 function fitHospitalCards(){
   requestAnimationFrame(function(){
-    document.querySelectorAll('.htmpl-inner').forEach(function(inner){
+    document.querySelectorAll('.htmpl-inner, .htmpl2-inner').forEach(function(inner){
       // Step 1: Reset all transforms and temporarily collapse flex to measure natural height
       inner.style.transform = '';
       inner.style.transformOrigin = '';
@@ -1759,6 +1778,7 @@ function render(){
     }
     const sizeNote = '<div class="hosp-size-note" style="font-size:10px;color:#888;text-align:center;margin-top:6px;letter-spacing:0.5px;">🖨️ Print size: <b>CR80 — 54 × 85.6 mm</b> (standard ID card) &nbsp;|&nbsp; Hospital v2: Front + Back with partner logos</div>';
     document.getElementById('preview').innerHTML = html + sizeNote;
+    fitHospitalCards();
     return;
   }
 

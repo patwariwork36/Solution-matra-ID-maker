@@ -633,6 +633,18 @@ input[type=range]{flex:1;}
   -webkit-print-color-adjust:exact;
 }
 
+/* Inner wrapper for auto-scaling when content overflows */
+.htmpl2-inner{
+  display:flex;
+  flex-direction:column;
+  flex:1;
+  min-height:0;
+  width:340px;
+  transform-origin:top center;
+  position:relative;
+  z-index:1;
+}
+
 /* ─── Front Side ─── */
 .htmpl2-front-header{
   padding:18px 22px 6px;
@@ -692,12 +704,12 @@ input[type=range]{flex:1;}
   flex:1;overflow:hidden;  /* white 50% */
 }
 .htmpl2-back-logo-row{
-  display:flex;flex-direction:row;
+  display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  gap:0;flex:1;width:100%;
+  gap:6px;flex:1;width:100%;
 }
-.htmpl2-back-logo{object-fit:contain;flex-shrink:0;margin-right:-10px;}
-.htmpl2-back-brand-block{display:flex;flex-direction:column;line-height:1.2;align-items:center;text-align:center;flex:1;margin-left:-5px;}
+.htmpl2-back-logo{object-fit:contain;flex-shrink:0;}
+.htmpl2-back-brand-block{display:flex;flex-direction:column;line-height:1.2;align-items:center;text-align:center;flex:1;}
 .htmpl2-back-brand{font-weight:800;letter-spacing:-0.5px;}
 .htmpl2-back-tag-row{display:flex;align-items:center;gap:8px;margin-top:8px;width:100%;}
 .htmpl2-back-tag-line{height:1px;flex:1;min-width:14px;}
@@ -1054,12 +1066,12 @@ input[type=range]{flex:1;}
     align-items:flex-start !important;
     justify-content:flex-start !important;
     gap:5mm !important;
-    page-break-after:always !important;
+    page-break-after:auto !important;
     page-break-inside:avoid !important;
-    break-after:page !important;
+    break-after:auto !important;
     break-inside:avoid !important;
-    margin:0 !important;
-    padding:5mm !important;
+    margin:0 0 5mm 0 !important;
+    padding:5mm 5mm 0 5mm !important;
     width:auto !important;
   }
   body.pmode-hospital2 .print-row:last-child{
