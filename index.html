@@ -484,6 +484,24 @@
         <span class="slider-val" id="h2DetailSizeVal">15px</span>
       </div>
 
+      <!-- Watermark Controls (Front + Back) -->
+      <div class="font-block" style="margin-top:10px">
+        <div class="font-block-title">🖼️ Logo Watermark (Hospital v2)</div>
+        <div class="slider-row">
+          <label>Watermark Size</label>
+          <input type="range" id="h2WmSize" min="60" max="400" value="200"
+                 oninput="updateHospSize('h2WmSize',this.value,'h2WmSizeVal','px')"/>
+          <span class="slider-val" id="h2WmSizeVal">200px</span>
+        </div>
+        <div class="slider-row">
+          <label>Opacity</label>
+          <input type="range" id="h2WmOpacity" min="1" max="40" value="6"
+                 oninput="updateHospSize('h2WmOpacity',this.value,'h2WmOpacityVal','%')"/>
+          <span class="slider-val" id="h2WmOpacityVal">6%</span>
+        </div>
+        <div style="font-size:9px;color:#888;margin-top:4px;">Logo & Signature section mein logo upload hone ke baad watermark dikhega</div>
+      </div>
+
       <!-- Back Side Font Sizes -->
       <div class="font-block" style="margin-top:10px">
         <div class="font-block-title">🔤 Back Side — Font Sizes</div>

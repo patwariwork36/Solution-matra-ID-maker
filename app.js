@@ -1201,6 +1201,8 @@ function updateHospSize(sliderId, value, valSpanId, unit){
     h2PhotoH:            'h2PhotoH',
     h2NameSize:          'h2NameSize',
     h2DetailSize:        'h2DetailSize',
+    h2WmSize:            'h2WmSize',
+    h2WmOpacity:         'h2WmOpacity',
     h2SignW:             'h2SignW',
     // Hospital v2 back content sizes
     h2BackTagSize:       'h2BackTagSize',
@@ -1352,8 +1354,15 @@ function renderHospital2Front(p){
   const fontMain  = state.h2FontMain  || 'Inter';
   const fontHindi = state.h2FontHindi || 'Noto Sans Devanagari';
 
+  const h2WmSize = state.h2WmSize != null ? state.h2WmSize : 200;
+  const h2WmOpacity = (state.h2WmOpacity != null ? state.h2WmOpacity : 6) / 100;
+  const wmHtml = state.logo
+    ? '<img class="htmpl-wm" src="' + state.logo + '" style="width:' + h2WmSize + 'px;height:' + h2WmSize + 'px;opacity:' + h2WmOpacity + ';"/>'
+    : '';
+
   return '<div class="card-pair"><div class="card-label">Front — ' + escapeHtml(p.name||'') + '</div>' +
     '<div class="htmpl2" style="font-family:\'' + fontMain + '\',sans-serif;">' +
+      wmHtml +
       '<div class="htmpl2-inner">' +
         '<div class="htmpl2-front-header">' + logoHtml +
           '<div class="htmpl2-brand-block">' +
@@ -1461,8 +1470,15 @@ function renderHospital2Back(p){
   const fontMain  = state.h2FontMain  || 'Inter';
   const fontHindi = state.h2FontHindi || 'Noto Sans Devanagari';
 
+  const h2WmSize = state.h2WmSize != null ? state.h2WmSize : 200;
+  const h2WmOpacity = (state.h2WmOpacity != null ? state.h2WmOpacity : 6) / 100;
+  const wmHtml = state.logo
+    ? '<img class="htmpl-wm" src="' + state.logo + '" style="width:' + h2WmSize + 'px;height:' + h2WmSize + 'px;opacity:' + h2WmOpacity + ';"/>'
+    : '';
+
   return '<div class="card-pair"><div class="card-label">Back — ' + escapeHtml(p.name||'') + '</div>' +
     '<div class="htmpl2" style="font-family:\'' + fontMain + '\',sans-serif;">' +
+      wmHtml +
       '<div class="htmpl2-inner">' +
         '<div class="htmpl2-back-top">' +
           '<div class="htmpl2-back-logo-row">' + logoHtml +
