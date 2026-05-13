@@ -55,21 +55,41 @@
     <h2 onclick="toggleSection(this)">🎴 Template <span class="badge">NEW</span> <span class="arrow">▼</span></h2>
     <div class="section-content">
       <div class="hint">Choose card template style:</div>
-      <div class="template-grid template-grid-3">
+      <div class="template-grid">
         <button class="tmpl-btn active" data-tmpl="govt" onclick="setTemplate('govt')">
           <span class="tm-icon">🏛️</span>
           <span class="tm-title">Government</span>
-          <span class="tm-desc">Revenue / Patwari<br>style</span>
+          <span class="tm-desc">Revenue / Patwari style</span>
         </button>
         <button class="tmpl-btn" data-tmpl="hospital" onclick="setTemplate('hospital')">
           <span class="tm-icon">🏥</span>
           <span class="tm-title">Hospital v1</span>
-          <span class="tm-desc">Single side<br>Compact</span>
+          <span class="tm-desc">Single side Compact</span>
         </button>
         <button class="tmpl-btn" data-tmpl="hospital2" onclick="setTemplate('hospital2')">
           <span class="tm-icon">🏨</span>
           <span class="tm-title">Hospital v2</span>
-          <span class="tm-desc">Front + Back<br>Partner logos</span>
+          <span class="tm-desc">Front + Back Partner logos</span>
+        </button>
+        <button class="tmpl-btn" data-tmpl="hosp_premium" onclick="setTemplate('hosp_premium')">
+          <span class="tm-icon">💎</span>
+          <span class="tm-title">Premium</span>
+          <span class="tm-desc">Elegant & Clean</span>
+        </button>
+        <button class="tmpl-btn" data-tmpl="hosp_modern" onclick="setTemplate('hosp_modern')">
+          <span class="tm-icon">✨</span>
+          <span class="tm-title">Modern</span>
+          <span class="tm-desc">Vibrant gradients</span>
+        </button>
+        <button class="tmpl-btn" data-tmpl="hosp_minimal" onclick="setTemplate('hosp_minimal')">
+          <span class="tm-icon">📐</span>
+          <span class="tm-title">Minimal</span>
+          <span class="tm-desc">Simple outlines</span>
+        </button>
+        <button class="tmpl-btn" data-tmpl="hosp_corporate" onclick="setTemplate('hosp_corporate')">
+          <span class="tm-icon">🏢</span>
+          <span class="tm-title">Corporate</span>
+          <span class="tm-desc">Professional</span>
         </button>
       </div>
     </div>
@@ -111,8 +131,8 @@
       <div class="status" id="bulkStatus"></div>
     </div>
 
-    <h2 onclick="toggleSection(this)" data-tmpl-only="govt">📐 Orientation <span class="arrow">▼</span></h2>
-    <div class="section-content" data-tmpl-only="govt">
+    <h2 onclick="toggleSection(this)">📐 Orientation <span class="arrow">▼</span></h2>
+    <div class="section-content">
       <div class="toggle-row">
         <button id="b-portrait" class="active" onclick="setOrient('portrait')">📄 Portrait</button>
         <button id="b-landscape" onclick="setOrient('landscape')">📰 Landscape</button>
@@ -325,8 +345,8 @@
     <!-- ═══════════════════════════════════════════ -->
     <!-- HOSPITAL v2 INFO SECTION                     -->
     <!-- ═══════════════════════════════════════════ -->
-    <h2 onclick="toggleSection(this)" data-tmpl-only="hospital2">🏨 Hospital v2 Info <span class="arrow">▼</span></h2>
-    <div class="section-content" data-tmpl-only="hospital2">
+    <h2 onclick="toggleSection(this)" data-tmpl-only="hospital2,hosp_premium,hosp_modern,hosp_minimal,hosp_corporate">🏨 Hospital v2 Info <span class="arrow">▼</span></h2>
+    <div class="section-content" data-tmpl-only="hospital2,hosp_premium,hosp_modern,hosp_minimal,hosp_corporate">
       <div class="hint">Front + Back design with partner logos panel. Hospital name 2 words: write as <code>Radha krishna</code> (space) ya <code>RadhaKrishna</code> (camelCase) — words ke alag colors lagenge.</div>
 
       <label>Hospital Name (e.g. Radhakrishna or Radha krishna)</label>
@@ -482,6 +502,11 @@
         <label>Detail Row Font</label>
         <input type="range" id="h2DetailSize" min="10" max="20" step="0.5" value="15" oninput="updateHospSize('h2DetailSize',this.value,'h2DetailSizeVal','px')"/>
         <span class="slider-val" id="h2DetailSizeVal">15px</span>
+      </div>
+      <div class="slider-row">
+        <label>Address Font (Front)</label>
+        <input type="range" id="h2AddressSize" min="7" max="18" step="0.5" value="11.5" oninput="updateHospSize('h2AddressSize',this.value,'h2AddressSizeVal','px')"/>
+        <span class="slider-val" id="h2AddressSizeVal">11.5px</span>
       </div>
 
       <!-- Watermark Controls (Front + Back) -->
@@ -779,8 +804,8 @@
       </div>
     </div>
 
-    <h2 onclick="toggleSection(this)" data-tmpl-only="govt">🖨️ Print Layout <span class="badge">NEW</span> <span class="arrow">▼</span></h2>
-    <div class="section-content" data-tmpl-only="govt">
+    <h2 onclick="toggleSection(this)">🖨️ Print Layout <span class="badge">NEW</span> <span class="arrow">▼</span></h2>
+    <div class="section-content">
       <div class="hint">
         Choose how cards should print:
       </div>

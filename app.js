@@ -119,6 +119,7 @@ const DEFAULT_STATE = {
   h2PhotoH: 240,
   h2NameSize: 24,
   h2DetailSize: 15,
+  h2AddressSize: 11.5,
   h2SignW: 140,
   h2SignRotate: 0,
   colors: Object.assign({}, DEFAULT_COLORS),
@@ -667,6 +668,7 @@ function syncInputsToCurrent(){
     {id:'h2PhotoH',        valId:'h2PhotoHVal',        key:'h2PhotoH',        def:240, unit:'px'},
     {id:'h2NameSize',      valId:'h2NameSizeVal',      key:'h2NameSize',      def:24,  unit:'px'},
     {id:'h2DetailSize',    valId:'h2DetailSizeVal',    key:'h2DetailSize',    def:15,  unit:'px'},
+    {id:'h2AddressSize',   valId:'h2AddressSizeVal',   key:'h2AddressSize',   def:11.5,unit:'px'},
     {id:'h2SignW',         valId:'h2SignWVal',         key:'h2SignW',         def:140, unit:'px'}
   ];
   h2Sliders.forEach(s=>{
@@ -1147,23 +1149,15 @@ function setTemplate(tmpl){
     btn.classList.toggle('active', btn.dataset.tmpl === tmpl);
   });
   // Show/hide template-specific sections
-  const govtSections = document.querySelectorAll('[data-tmpl-only="govt"]');
-  const hospSections = document.querySelectorAll('[data-tmpl-only="hospital"]');
-  const hosp2Sections = document.querySelectorAll('[data-tmpl-only="hospital2"]');
-  govtSections.forEach(s => s.style.display = (tmpl === 'govt') ? '' : 'none');
-  hospSections.forEach(s => s.style.display = (tmpl === 'hospital') ? '' : 'none');
-  hosp2Sections.forEach(s => s.style.display = (tmpl === 'hospital2') ? '' : 'none');
+  // We check if the element's data-tmpl-only attribute contains the current tmpl
+  document.querySelectorAll('[data-tmpl-only]').forEach(el => {
+    const allowed = el.getAttribute('data-tmpl-only').split(',');
+    el.style.display = allowed.includes(tmpl) ? '' : 'none';
+  });
 
-  // Switch body pmode class so hospital print grid overrides pmode-pair page breaks
+  // Apply print mode
   document.body.classList.remove('pmode-pair', 'pmode-duplex', 'pmode-grid', 'pmode-hospital', 'pmode-hospital2');
-  if (tmpl === 'hospital') {
-    document.body.classList.add('pmode-hospital');
-  } else if (tmpl === 'hospital2') {
-    document.body.classList.add('pmode-hospital2');
-  } else {
-    // Restore saved print mode for govt template
-    document.body.classList.add('pmode-' + (state.printMode || 'pair'));
-  }
+  document.body.classList.add('pmode-' + (state.printMode || 'pair'));
 
   render();
   persist();
@@ -1288,7 +1282,7 @@ function updatePartnerName(idx, val){
 }
 
 // ─── Hospital v2 RENDER ───
-function renderHospital2Front(p){
+function renderHospital2Front(p, extraClass = ''){
   const cName1     = state.h2ColorName1    || '#1a8a92';
   const cName2     = state.h2ColorName2    || '#163d5c';
   const cSubtitle  = state.h2ColorSubtitle || '#444444';
@@ -1361,7 +1355,7 @@ function renderHospital2Front(p){
     : '';
 
   return '<div class="card-pair"><div class="card-label">Front — ' + escapeHtml(p.name||'') + '</div>' +
-    '<div class="htmpl2" style="font-family:\'' + fontMain + '\',sans-serif;">' +
+    '<div class="htmpl2 ' + extraClass + '" style="font-family:\'' + fontMain + '\',sans-serif;">' +
       wmHtml +
       '<div class="htmpl2-inner">' +
         '<div class="htmpl2-front-header">' + logoHtml +
@@ -1387,7 +1381,7 @@ function renderHospital2Front(p){
           '<div class="htmpl2-divider-white"></div>' +
           '<div class="htmpl2-address-block">' +
             '<div class="htmpl2-address-title">' + pinSvg + ' Address</div>' +
-            '<div class="htmpl2-address-text" style="color:rgba(255,255,255,0.9);font-family:\'' + fontHindi + '\',sans-serif;">' + escapeHtml(state.h2Address||'') +
+            '<div class="htmpl2-address-text" style="color:rgba(255,255,255,0.9);font-family:\'' + fontHindi + '\',sans-serif;font-size:' + (state.h2AddressSize || 11.5) + 'px;">' + escapeHtml(state.h2Address||'') +
               (state.h2Phones ? '<br>Phone No. ' + escapeHtml(state.h2Phones) : '') +
             '</div>' +
           '</div>' +
@@ -1396,7 +1390,7 @@ function renderHospital2Front(p){
     '</div></div>';
 }
 
-function renderHospital2Back(p){
+function renderHospital2Back(p, extraClass = ''){
   const cName1     = state.h2ColorName1    || '#1a8a92';
   const cName2     = state.h2ColorName2    || '#163d5c';
   const cSubtitle  = state.h2ColorSubtitle || '#444444';
@@ -1477,7 +1471,7 @@ function renderHospital2Back(p){
     : '';
 
   return '<div class="card-pair"><div class="card-label">Back — ' + escapeHtml(p.name||'') + '</div>' +
-    '<div class="htmpl2" style="font-family:\'' + fontMain + '\',sans-serif;">' +
+    '<div class="htmpl2 ' + extraClass + '" style="font-family:\'' + fontMain + '\',sans-serif;">' +
       wmHtml +
       '<div class="htmpl2-inner">' +
         '<div class="htmpl2-back-top">' +
@@ -1521,8 +1515,8 @@ function renderHospital2Back(p){
     '</div></div>';
 }
 
-function renderHospital2(p){
-  return renderHospital2Front(p) + renderHospital2Back(p);
+function renderHospital2(p, extraClass = ''){
+  return renderHospital2Front(p, extraClass) + renderHospital2Back(p, extraClass);
 }
 
 
@@ -1744,73 +1738,44 @@ function render(){
   const tmpl = state.template || 'govt';
   let fn;
   if (tmpl === 'hospital'){
-    fn = renderHospital;
+    // Pass landscape to hospital if needed
+    fn = p => {
+      let html = renderHospital(p);
+      if (state.orient === 'landscape') {
+        html = html.replace('<div class="htmpl"', '<div class="htmpl landscape"');
+      }
+      return html;
+    };
   } else if (tmpl === 'hospital2'){
-    fn = renderHospital2;
+    fn = p => renderHospital2(p, (state.orient === 'landscape' ? 'landscape' : 'portrait'));
+  } else if (tmpl === 'hosp_premium') {
+    fn = renderHospPremium;
+  } else if (tmpl === 'hosp_modern') {
+    fn = renderHospModern;
+  } else if (tmpl === 'hosp_minimal') {
+    fn = renderHospMinimal;
+  } else if (tmpl === 'hosp_corporate') {
+    fn = renderHospCorporate;
   } else {
     fn = state.orient === 'portrait' ? renderPortrait : renderLandscape;
   }
   const mode = state.printMode || 'pair';
   let html = '';
 
-  // Hospital template = CR80 cards in a 3×3 grid per A4 page
-  // Group people into pages of 9, rows of 3
-  if (tmpl === 'hospital'){
-    const COLS = 3;
-    const PER_PAGE = 9; // 3 cols × 3 rows per A4
-    const allCards = state.people.map(p => fn(p));
-    let pages = [];
-    for (let i = 0; i < allCards.length; i += PER_PAGE) {
-      const pageCards = allCards.slice(i, i + PER_PAGE);
-      let rows = [];
-      for (let j = 0; j < pageCards.length; j += COLS) {
-        rows.push('<div class="hosp-row">' + pageCards.slice(j, j + COLS).join('') + '</div>');
-      }
-      pages.push('<div class="hosp-page">' + rows.join('') + '</div>');
-    }
-    html = pages.join('');
-    const sizeNote = '<div class="hosp-size-note" style="font-size:10px;color:#888;text-align:center;margin-top:6px;letter-spacing:0.5px;">🖨️ Print size: <b>CR80 — 54 × 85.6 mm</b> (standard ID card) &nbsp;|&nbsp; 9 cards per A4 page</div>';
-    document.getElementById('preview').innerHTML = html + sizeNote;
-    fitHospitalCards();   // scale content to always fit 340×540
-    return;
-  }
-
-  // Hospital v2 template = front + back (1 person per row, both sides side-by-side)
-  if (tmpl === 'hospital2'){
-    if (mode === 'duplex'){
-      const fronts = state.people.map(p =>
-        '<div class="card-pair front-pair">' +
-        renderHospital2Front(p).replace(/^<div class="card-pair">/, '').replace(/<\/div>$/, '') +
-        '</div>'
-      );
-      const backs = state.people.map(p =>
-        '<div class="card-pair back-pair">' +
-        renderHospital2Back(p).replace(/^<div class="card-pair">/, '').replace(/<\/div>$/, '') +
-        '</div>'
-      );
-      html = fronts.join('') + backs.join('');
-    } else {
-      html = state.people.map(p => '<div class="print-row">' + fn(p) + '</div>').join('');
-    }
-    const sizeNote = '<div class="hosp-size-note" style="font-size:10px;color:#888;text-align:center;margin-top:6px;letter-spacing:0.5px;">🖨️ Print size: <b>CR80 — 54 × 85.6 mm</b> (standard ID card) &nbsp;|&nbsp; Hospital v2: Front + Back with partner logos</div>';
-    document.getElementById('preview').innerHTML = html + sizeNote;
-    fitHospitalCards();
-    return;
-  }
-
   if (mode === 'duplex'){
     // All FRONTs first, then all BACKs (so duplex printer flips correctly)
     const fronts = state.people.map(p => {
       const both = fn(p);
-      // extract just the FRONT card-pair
-      const m = both.match(/<div class="card-pair">[\s\S]*?<\/div><\/div>/);
-      return m ? m[0].replace('<div class="card-pair">', '<div class="card-pair front-pair">') : '';
+      const m = both.match(/<div class="card-pair">[\s\S]*?(<\/div>\s*<\/div>|<\/div>)/);
+      // For single-sided cards (hospital v1), they might not have a back card div.
+      // Actually, all our rendering returns <div class="card-pair">...</div>
+      // We wrap the front part
+      return '<div class="card-pair front-pair">' + (both.includes('bcard') ? both.split('<div class="bcard')[0].replace('<div class="card-pair">','') : both.replace('<div class="card-pair">','')) + '</div>';
     });
     const backs = state.people.map(p => {
       const both = fn(p);
-      // extract just the BACK card-pair (second occurrence)
-      const matches = both.match(/<div class="card-pair">[\s\S]*?<\/div><\/div>/g);
-      return matches && matches[1] ? matches[1].replace('<div class="card-pair">', '<div class="card-pair back-pair">') : '';
+      if (!both.includes('bcard')) return ''; // Single sided like hosp v1 has no back
+      return '<div class="card-pair back-pair"><div class="bcard' + both.split('<div class="bcard')[1] + '</div>';
     });
     html = fronts.join('') + backs.join('');
   } else {
@@ -1820,7 +1785,14 @@ function render(){
     ).join('');
   }
 
-  document.getElementById('preview').innerHTML = html;
+  const isHosp = tmpl.startsWith('hosp');
+  const sizeNote = isHosp ? '<div class="hosp-size-note" style="font-size:10px;color:#888;text-align:center;margin-top:6px;letter-spacing:0.5px;">🖨️ Print size: <b>CR80 — 54 × 85.6 mm</b> (standard ID card)</div>' : '';
+  
+  document.getElementById('preview').innerHTML = html + sizeNote;
+  
+  if (isHosp && typeof fitHospitalCards === 'function') {
+    fitHospitalCards();
+  }
 }
 
 syncInputsToCurrent();
@@ -1828,14 +1800,8 @@ renderTabs();
 // Apply current print mode body class + button highlight
 const initMode = state.printMode || 'pair';
 const initTmpl = state.template || 'govt';
-// For hospital template, use pmode-hospital body class (prevents pmode-pair page-break conflict)
-if (initTmpl === 'hospital') {
-  document.body.classList.add('pmode-hospital');
-} else if (initTmpl === 'hospital2') {
-  document.body.classList.add('pmode-hospital2');
-} else {
-  document.body.classList.add('pmode-' + initMode);
-}
+
+document.body.classList.add('pmode-' + initMode);
 document.querySelectorAll('.pmode-btn').forEach(btn => {
   btn.classList.toggle('active', btn.dataset.mode === initMode);
 });
@@ -1843,9 +1809,10 @@ document.querySelectorAll('.pmode-btn').forEach(btn => {
 document.querySelectorAll('.tmpl-btn').forEach(btn => {
   btn.classList.toggle('active', btn.dataset.tmpl === initTmpl);
 });
-document.querySelectorAll('[data-tmpl-only="govt"]').forEach(s => s.style.display = (initTmpl === 'govt') ? '' : 'none');
-document.querySelectorAll('[data-tmpl-only="hospital"]').forEach(s => s.style.display = (initTmpl === 'hospital') ? '' : 'none');
-document.querySelectorAll('[data-tmpl-only="hospital2"]').forEach(s => s.style.display = (initTmpl === 'hospital2') ? '' : 'none');
+document.querySelectorAll('[data-tmpl-only]').forEach(el => {
+  const allowed = el.getAttribute('data-tmpl-only').split(',');
+  el.style.display = allowed.includes(initTmpl) ? '' : 'none';
+});
 applyPageSize();
 render();
 
@@ -2032,3 +1999,177 @@ function importProfiles(ev){
 }
 
 refreshProfileSelect();
+
+// Helper to get partner logos safely
+function getPartnerLogosHTML() {
+  const logos = Array.isArray(state.h2PartnerLogos) ? state.h2PartnerLogos : [];
+  const names = Array.isArray(state.h2PartnerNames) ? state.h2PartnerNames : [];
+  const boxes = [];
+  for (let i = 0; i < 5; i++){
+    const img = logos[i] || '';
+    const name = names[i] || '';
+    if (!img && !name) continue;
+    boxes.push('<div class="pt-logo-box">' + (img ? '<img src="' + img + '"/>' : escapeHtml(name)) + '</div>');
+  }
+  return boxes.length ? '<div class="pt-logos-row">' + boxes.join('') + '</div>' : '';
+}
+
+function getPhoto(p) { return p.photo ? '<img src="'+p.photo+'" />' : '<div class="no-ph">Photo</div>'; }
+function getSign() { return state.sign ? '<img class="pr-sign" src="'+state.sign+'" />' : ''; }
+function getLogo() { return state.logo ? '<img class="pr-logo-img" src="'+state.logo+'" />' : ''; }
+
+/* ─── Premium Template (Gold & Dark) ─── */
+function renderHospPremium(p) {
+  const isLand = state.orient === 'landscape';
+  const c = isLand ? 'landscape' : 'portrait';
+  
+  const frontHtml = '<div class="card front premium-front ' + c + '">' +
+    '<div class="pr-bg-accent"></div>' +
+    '<div class="pr-header">' +
+      '<div class="pr-logo">' + getLogo() + '</div>' +
+      '<div class="pr-brand">' +
+        '<div class="pr-name">' + escapeHtml(state.h2Name || '') + '</div>' +
+        '<div class="pr-sub">' + escapeHtml(state.h2Sub1 || '') + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="pr-body">' +
+      '<div class="pr-photo-wrap">' + getPhoto(p) + '</div>' +
+      '<div class="pr-info">' +
+        '<div class="pr-person-name">' + escapeHtml(p.name || '') + '</div>' +
+        '<div class="pr-post">' + escapeHtml(p.post || '') + '</div>' +
+        '<div class="pr-contact">✆ ' + escapeHtml(p.contact || '') + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="pr-footer">' +
+      '<div class="pr-sign-box">' + getSign() + '<div class="pr-sign-label">Signature</div></div>' +
+      '<div class="pr-address">' + escapeHtml(state.h2Address || '') + '</div>' +
+    '</div>' +
+  '</div>';
+
+  const backHtml = '<div class="bcard back premium-back ' + c + '">' +
+    '<div class="pr-back-top">' +
+      '<div class="pr-b-name">' + escapeHtml(state.h2Name || '') + '</div>' +
+      '<div class="pr-b-tag">' + escapeHtml(state.h2Sub2 || '') + '</div>' +
+    '</div>' +
+    '<div class="pr-back-mid">' +
+      '<div class="pr-b-line">' + escapeHtml(state.h2PartnersLine || '') + '</div>' +
+      getPartnerLogosHTML() +
+    '</div>' +
+    '<div class="pr-back-bottom">' +
+      '<div class="pr-b-unit">' + escapeHtml(state.h2UnitName || '') + '</div>' +
+      '<div class="pr-b-address">' + escapeHtml(state.h2UnitAddress || state.h2Address || '') + '</div>' +
+    '</div>' +
+  '</div>';
+
+  return '<div class="card-pair">' + frontHtml + backHtml + '</div>';
+}
+
+/* ─── Modern Template (Vibrant Gradients / Glass) ─── */
+function renderHospModern(p) {
+  const isLand = state.orient === 'landscape';
+  const c = isLand ? 'landscape' : 'portrait';
+
+  const frontHtml = '<div class="card front modern-front ' + c + '">' +
+    '<div class="md-circles"></div>' +
+    '<div class="md-glass">' +
+      '<div class="md-header">' + getLogo() + ' <span>' + escapeHtml(state.h2Name || '') + '</span></div>' +
+      '<div class="md-main">' +
+        '<div class="md-photo">' + getPhoto(p) + '</div>' +
+        '<div class="md-details">' +
+          '<div class="md-person">' + escapeHtml(p.name || '') + '</div>' +
+          '<div class="md-post">' + escapeHtml(p.post || '') + '</div>' +
+          '<div class="md-contact">' + escapeHtml(p.contact || '') + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="md-footer">' +
+        '<div class="md-address">' + escapeHtml(state.h2Address || '') + '</div>' +
+        '<div class="md-sign">' + getSign() + '</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+  const backHtml = '<div class="bcard back modern-back ' + c + '">' +
+    '<div class="md-glass md-back-glass">' +
+       '<div class="md-b-header">' + escapeHtml(state.h2Name || '') + '</div>' +
+       '<div class="md-b-partners">' + getPartnerLogosHTML() + '</div>' +
+       '<div class="md-b-footer">' +
+         '<div class="md-b-unit">' + escapeHtml(state.h2UnitName || '') + '</div>' +
+         '<div class="md-b-addr">' + escapeHtml(state.h2UnitAddress || state.h2Address || '') + '</div>' +
+       '</div>' +
+    '</div>' +
+  '</div>';
+
+  return '<div class="card-pair">' + frontHtml + backHtml + '</div>';
+}
+
+/* ─── Minimal Template (Clean, Whitespace) ─── */
+function renderHospMinimal(p) {
+  const isLand = state.orient === 'landscape';
+  const c = isLand ? 'landscape' : 'portrait';
+
+  const frontHtml = '<div class="card front minimal-front ' + c + '">' +
+    '<div class="mn-header">' +
+      '<div class="mn-brand">' + escapeHtml(state.h2Name || '') + '</div>' +
+      '<div class="mn-sub">' + escapeHtml(state.h2Sub1 || '') + '</div>' +
+    '</div>' +
+    '<div class="mn-photo-ring"><div class="mn-photo">' + getPhoto(p) + '</div></div>' +
+    '<div class="mn-name">' + escapeHtml(p.name || '') + '</div>' +
+    '<div class="mn-post">' + escapeHtml(p.post || '') + '</div>' +
+    '<div class="mn-divider"></div>' +
+    '<div class="mn-footer">' +
+      '<div class="mn-contact">' + escapeHtml(p.contact || '') + '</div>' +
+      '<div class="mn-address">' + escapeHtml(state.h2Address || '') + '</div>' +
+      '<div class="mn-sign">' + getSign() + '</div>' +
+    '</div>' +
+  '</div>';
+
+  const backHtml = '<div class="bcard back minimal-back ' + c + '">' +
+    '<div class="mn-b-header">' + escapeHtml(state.h2Name || '') + '</div>' +
+    '<div class="mn-b-partners">' + getPartnerLogosHTML() + '</div>' +
+    '<div class="mn-b-footer">' +
+       '<div class="mn-b-unit">' + escapeHtml(state.h2UnitName || '') + '</div>' +
+       '<div class="mn-b-addr">' + escapeHtml(state.h2UnitAddress || state.h2Address || '') + '</div>' +
+    '</div>' +
+  '</div>';
+
+  return '<div class="card-pair">' + frontHtml + backHtml + '</div>';
+}
+
+/* ─── Corporate Template (Left Bar) ─── */
+function renderHospCorporate(p) {
+  const isLand = state.orient === 'landscape';
+  const c = isLand ? 'landscape' : 'portrait';
+
+  const frontHtml = '<div class="card front corp-front ' + c + '">' +
+    '<div class="cp-sidebar"></div>' +
+    '<div class="cp-content">' +
+      '<div class="cp-header">' + getLogo() + ' <div class="cp-title">' + escapeHtml(state.h2Name || '') + '</div></div>' +
+      '<div class="cp-main">' +
+        '<div class="cp-photo">' + getPhoto(p) + '</div>' +
+        '<div class="cp-details">' +
+          '<div class="cp-name">' + escapeHtml(p.name || '') + '</div>' +
+          '<div class="cp-post">' + escapeHtml(p.post || '') + '</div>' +
+          '<div class="cp-contact">' + escapeHtml(p.contact || '') + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="cp-footer">' +
+        '<div class="cp-addr">' + escapeHtml(state.h2Address || '') + '</div>' +
+        '<div class="cp-sign">' + getSign() + '</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+  const backHtml = '<div class="bcard back corp-back ' + c + '">' +
+    '<div class="cp-sidebar"></div>' +
+    '<div class="cp-content">' +
+       '<div class="cp-b-header">' + escapeHtml(state.h2Name || '') + '</div>' +
+       '<div class="cp-b-partners">' + getPartnerLogosHTML() + '</div>' +
+       '<div class="cp-b-footer">' +
+         '<div class="cp-b-unit">' + escapeHtml(state.h2UnitName || '') + '</div>' +
+         '<div class="cp-b-addr">' + escapeHtml(state.h2UnitAddress || state.h2Address || '') + '</div>' +
+       '</div>' +
+    '</div>' +
+  '</div>';
+
+  return '<div class="card-pair">' + frontHtml + backHtml + '</div>';
+}
